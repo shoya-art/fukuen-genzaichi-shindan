@@ -95,13 +95,17 @@ let currentQuestion = 0;
 let scores = { A: 0, B: 0, C: 0, D: 0 };
 let userAnswers = []; // 各質問で選んだテキストを保存する配列
 let userTypes = []; // 各質問で選んだタイプを保存する配列
+let userName = ""; // ユーザー名を保存する変数
 
 const dom = {
     startScreen: document.getElementById('start-screen'),
+    nameScreen: document.getElementById('name-screen'),
     questionScreen: document.getElementById('question-screen'),
     loadingScreen: document.getElementById('loading-screen'),
     resultScreen: document.getElementById('result-screen'),
     startBtn: document.getElementById('start-btn'),
+    nextToQBtn: document.getElementById('next-to-q-btn'),
+    userNameInput: document.getElementById('user-name-input'),
     qNum: document.getElementById('q-num'),
     qText: document.getElementById('question-text'),
     optionsContainer: document.getElementById('options-container'),
@@ -115,9 +119,19 @@ const dom = {
 };
 
 function init() {
-    dom.startBtn.addEventListener('click', startQuiz);
+    dom.startBtn.addEventListener('click', () => showScreen(dom.nameScreen));
+    if (dom.nextToQBtn) dom.nextToQBtn.addEventListener('click', goToQuestions);
     if (dom.backBtn) dom.backBtn.addEventListener('click', goBack);
     if (dom.closeBtn) dom.closeBtn.addEventListener('click', () => { window.close(); });
+}
+
+function goToQuestions() {
+    userName = dom.userNameInput.value.trim();
+    if (!userName) {
+        alert("お名前を教えてくださいね。");
+        return;
+    }
+    startQuiz();
 }
 
 function goBack() {
@@ -129,6 +143,9 @@ function goBack() {
         }
         userAnswers.pop();
         renderQuestion();
+    } else {
+        // Q1で戻るボタンを押した場合は名前入力画面へ戻す
+        showScreen(dom.nameScreen);
     }
 }
 
@@ -259,6 +276,7 @@ function sendDataToGoogleForms(resultType) {
 
     // 送信するデータを設定
     const data = {
+        'entry.808125093': userName, // お名前
         'entry.1761508389': userAnswers[0] || '', // Q1
         'entry.1005036062': userAnswers[1] || '', // Q2
         'entry.199990545': userAnswers[2] || '',  // Q3
