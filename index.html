@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>あなたの復縁可能性診断</title>
-    <!-- キャッシュ回避のためにパラメータ追加 -->
-    <link rel="stylesheet" href="style.css?v=2">
-    <!-- Google Fonts: Zen Maru Gothic -->
+    <link rel="stylesheet" href="style.css?v=3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap"
@@ -16,38 +14,57 @@
 
 <body>
     <div id="app" class="container">
-        <!-- Start Screen -->
         <section id="start-screen" class="screen active">
             <div class="hero-image-container">
-                <img src="images/couple_reconciliation_illustration.png" alt="あなたの復縁可能性診断" class="hero-photo">
+                <img src="images/hero-couple-photo.png" alt="笑顔で過ごすカップル" class="hero-photo">
             </div>
             <div class="title-container">
                 <p class="title-prefix">あなたの</p>
                 <h1 class="main-title highlight">復縁可能性診断</h1>
                 <p class="title-suffix">〜復縁するためにやるべきこと〜</p>
             </div>
-
             <p class="description">
                 あなたが復縁できない本当の理由は？<br>
-                たった1分、7つの質問に答えるだけで<br>
+                約3分の質問に答えるだけで<br>
                 可能性とこれからやるべきことがわかります。<br><br>
-                <span
-                    style="font-size: 0.9rem; color: #ff8e9b; font-weight: bold;">※最も正確な診断結果になりますので、<br>あまり悩まず「直感」で選んでください。</span>
+                <span style="font-size: 0.9rem; color: #ff8e9b; font-weight: bold;">※より正確な結果を出すために、<br>あまり悩まず「直感」で選んでください。</span>
             </p>
             <button id="start-btn" class="primary-btn">診断をスタートする</button>
         </section>
 
-        <!-- Name Input Screen -->
-        <section id="name-screen" class="screen">
-            <h2 class="question-text">診断を始める前に、<br>あなたのお名前（ニックネーム可）を<br>教えてください</h2>
-            <div class="name-input-container">
-                <input type="text" id="user-name-input" class="name-input" placeholder="例：あやか">
+        <section id="profile-screen" class="screen">
+            <h2 class="question-text">診断を始める前に、<br>あなたのことを教えてください</h2>
+            <div class="profile-fields">
+                <label class="field-label" for="user-name-input">公式LINEで使用しているお名前</label>
+                <input type="text" id="user-name-input" class="name-input" placeholder="例：あやか" autocomplete="name">
+                <p class="name-sub-text">※必ず公式LINEと同じお名前を入力してください</p>
+
+                <label class="field-label" for="user-age-input">年齢</label>
+                <div class="age-input-row">
+                    <input type="number" id="user-age-input" class="name-input age-input" placeholder="例：28" min="15" max="99" inputmode="numeric">
+                    <span>歳</span>
+                </div>
+
+                <label class="field-label" for="user-job-select">現在のお仕事</label>
+                <select id="user-job-select" class="name-input profile-select">
+                    <option value="">選択してください</option>
+                    <option>会社員・公務員</option>
+                    <option>経営者・役員</option>
+                    <option>自営業・フリーランス</option>
+                    <option>学生（仕事もしている）</option>
+                    <option>学生</option>
+                    <option>パート・アルバイト</option>
+                    <option>専業主婦</option>
+                    <option>休職中</option>
+                    <option>求職中</option>
+                    <option>無職</option>
+                    <option>その他</option>
+                </select>
             </div>
-            <p class="name-sub-text">※名前は診断結果の送信にのみ使用されます</p>
-            <button id="next-to-q-btn" class="primary-btn" style="margin-top: 2rem;">質問に答える</button>
+            <p id="profile-error" class="form-error" role="alert"></p>
+            <button id="next-to-q-btn" class="primary-btn">質問に答える</button>
         </section>
 
-        <!-- Question Screen -->
         <section id="question-screen" class="screen">
             <div class="progress-wrapper">
                 <div class="progress-bar" id="progress-bar"></div>
@@ -56,24 +73,28 @@
                 <span class="q-label">Q<span id="q-num">1</span>.</span>
             </div>
             <h2 id="question-text" class="question-text">質問テキスト</h2>
-            <div id="options-container" class="options-container">
-                <!-- Options will be injected here -->
-            </div>
+            <p id="question-note" class="question-note"></p>
+            <div id="options-container" class="options-container"></div>
+            <button id="multi-next-btn" class="primary-btn multi-next-btn" hidden>選んだ内容で次へ</button>
             <button id="back-btn" class="text-btn" style="display: none;">前の質問に戻る</button>
         </section>
 
-        <!-- Loading Screen -->
         <section id="loading-screen" class="screen">
             <div class="loader"></div>
-            <p class="loading-text">あなたに一番合った復縁方法を分析中...</p>
+            <h2 class="loading-title">診断結果を作成しています</h2>
+            <p class="loading-text">あなたの回答をもとに<br>復縁の可能性を確認中...</p>
+            <div class="analysis-list">
+                <div class="analysis-item active"><span>✓</span>彼との現在の関係</div>
+                <div class="analysis-item"><span>✓</span>今、復縁を遠ざけている原因</div>
+                <div class="analysis-item"><span>✓</span>これから最初にやるべきこと</div>
+            </div>
+            <p class="loading-wait">もう少しだけお待ちください</p>
         </section>
 
-        <!-- Result Screen -->
         <section id="result-screen" class="screen">
             <h2 class="result-label">あなたの診断結果は...</h2>
-
-            <!-- 1つ目の枠：現状分析 -->
             <div class="result-card">
+                <p id="result-stage" class="result-stage">復縁可能性</p>
                 <h3 id="result-title" class="result-title">結果タイトル</h3>
                 <div class="result-ill-wrapper">
                     <img id="result-img" src="" alt="診断結果イメージ" class="result-illustration">
@@ -81,18 +102,25 @@
                 <p id="result-desc" class="result-desc">結果の説明</p>
             </div>
 
-            <!-- 2つ目の枠：一番必要なこと（旧CTAの代わり） -->
-            <div class="advice-section">
-                <p id="result-advice" class="advice-text">
-                    ここにアドバイスが表示されます
-                </p>
+            <div id="advice-section" class="advice-section" data-label="今やるべきこと">
+                <p id="result-advice" class="advice-text">ここにアドバイスが表示されます</p>
             </div>
 
-            <button id="close-btn" class="text-btn">画面を閉じる</button>
+            <div id="keyword-section" class="keyword-section">
+                <h3 id="keyword-heading">あなたの回答を僕が直接確認します</h3>
+                <p id="keyword-copy">今後の動き方を考えてLINEでお送りします。</p>
+                <p class="keyword-guide">この診断を受け取った公式LINEに戻り、<br>下の言葉をそのまま送ってください。</p>
+                <div id="result-keyword" class="keyword-box">未来設計</div>
+                <button id="copy-keyword-btn" class="primary-btn">キーワードをコピーする</button>
+                <p id="copy-status" class="copy-status" aria-live="polite"></p>
+                <p class="keyword-note">この時点で電話相談への申し込みにはなりません。<br>回答内容を確認したうえで僕からお返事します。</p>
+            </div>
+
+            <button id="close-btn" class="text-btn">画面を閉じてLINEに戻る</button>
         </section>
     </div>
 
-    <script src="main.js"></script>
+    <script src="main.js?v=3"></script>
 </body>
 
 </html>
