@@ -134,6 +134,13 @@ body {
     font-size: 0.95rem;
 }
 
+.start-meta {
+    display: inline-block;
+    margin-top: 0.8rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
 .primary-btn {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     color: white;
@@ -472,6 +479,78 @@ body {
 #result-screen {
     padding-top: 2rem;
     padding-bottom: 3rem;
+}
+
+.result-panel {
+    position: relative;
+    background: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 2.1rem 1.25rem 1.35rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.025);
+}
+
+.result-panel::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -0.85rem;
+    left: 1rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 20px;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.panel-title {
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+    font-size: 1.08rem;
+    line-height: 1.55;
+}
+
+.panel-copy {
+    color: #555;
+    font-size: 0.92rem;
+    line-height: 1.85;
+}
+
+.priority-flow {
+    margin: 0.25rem 0 1rem;
+    text-align: center;
+}
+
+.priority-step {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    background: #fff5f6;
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+.priority-step span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    flex: 0 0 1.7rem;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.priority-arrow {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    line-height: 1.4;
 }
 
 .result-label {

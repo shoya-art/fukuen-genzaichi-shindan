@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>あなたの復縁可能性診断</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <title>ジロー式 復縁現在地診断</title>
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap"
@@ -19,15 +19,18 @@
                 <img src="images/hero-couple-photo.png" alt="笑顔で過ごすカップル" class="hero-photo">
             </div>
             <div class="title-container">
-                <p class="title-prefix">あなたの</p>
-                <h1 class="main-title highlight">復縁可能性診断</h1>
-                <p class="title-suffix">〜復縁するためにやるべきこと〜</p>
+                <p class="title-prefix">ジロー式</p>
+                <h1 class="main-title highlight">復縁現在地診断</h1>
+                <p class="title-suffix">今の自分と2人の現在地がわかる</p>
             </div>
             <p class="description">
-                あなたが復縁できない本当の理由は？<br>
-                約3分の質問に答えるだけで<br>
-                可能性とこれからやるべきことがわかります。<br><br>
-                <span style="font-size: 0.9rem; color: #ff8e9b; font-weight: bold;">※より正確な結果を出すために、<br>あまり悩まず「直感」で選んでください。</span>
+                この診断では、<br>
+                ① 恋愛の中でハートがどう揺れやすいか<br>
+                ② 今の2人が復縁までのどこにいるのか<br>
+                この2つを見ていきます。<br><br>
+                正解・不正解はありません。<br>
+                今の自分に一番近いものを選んでください☺️<br>
+                <span class="start-meta">全15問／約2〜3分</span>
             </p>
             <button id="start-btn" class="primary-btn">診断をスタートする</button>
         </section>
@@ -70,7 +73,7 @@
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
             <div class="question-header">
-                <span class="q-label">Q<span id="q-num">1</span>.</span>
+                <span class="q-label"><span id="q-num">1</span> / 15</span>
             </div>
             <h2 id="question-text" class="question-text">質問テキスト</h2>
             <p id="question-note" class="question-note"></p>
@@ -82,45 +85,60 @@
         <section id="loading-screen" class="screen">
             <div class="loader"></div>
             <h2 class="loading-title">診断結果を作成しています</h2>
-            <p class="loading-text">あなたの回答をもとに<br>復縁の可能性を確認中...</p>
+            <p class="loading-text">あなたの回答をもとに<br>2つの現在地を整理中...</p>
             <div class="analysis-list">
-                <div class="analysis-item active"><span>✓</span>彼との現在の関係</div>
-                <div class="analysis-item"><span>✓</span>今、復縁を遠ざけている原因</div>
-                <div class="analysis-item"><span>✓</span>これから最初にやるべきこと</div>
+                <div class="analysis-item active"><span>✓</span>あなたのハートの揺れ方</div>
+                <div class="analysis-item"><span>✓</span>今の2人の復縁ステージ</div>
+                <div class="analysis-item"><span>✓</span>今から進める順番</div>
             </div>
             <p class="loading-wait">もう少しだけお待ちください</p>
         </section>
 
         <section id="result-screen" class="screen">
-            <h2 class="result-label">あなたの診断結果は...</h2>
+            <h2 class="result-label">あなたと彼の現在地が見えてきました</h2>
             <div class="result-card">
-                <p id="result-stage" class="result-stage">復縁可能性</p>
+                <p id="result-stage" class="result-stage">今の2人のステージ</p>
                 <h3 id="result-title" class="result-title">結果タイトル</h3>
                 <div class="result-ill-wrapper">
                     <img id="result-img" src="" alt="診断結果イメージ" class="result-illustration">
                 </div>
-                <p id="result-desc" class="result-desc">結果の説明</p>
+                <p id="result-desc" class="result-desc">現在地の説明</p>
             </div>
 
-            <div id="advice-section" class="advice-section" data-label="今やるべきこと">
-                <p id="result-advice" class="advice-text">ここにアドバイスが表示されます</p>
+            <div class="result-panel" data-label="あなた側の現在地">
+                <h3 id="heart-heading" class="panel-title"></h3>
+                <p id="heart-copy" class="panel-copy"></p>
+            </div>
+
+            <div class="result-panel" data-label="2人側の現在地">
+                <h3 id="couple-heading" class="panel-title"></h3>
+                <p id="couple-copy" class="panel-copy"></p>
+            </div>
+
+            <div class="result-panel priority-panel" data-label="今の優先順位">
+                <div id="priority-flow" class="priority-flow"></div>
+                <p id="priority-copy" class="panel-copy"></p>
+            </div>
+
+            <div class="result-panel" data-label="診断で分かること">
+                <p class="panel-copy">この診断で分かるのは、今の「現在地」と進める順番までです。同じ現在地でも、別れた理由・彼の性格・別れた後の行動・現在のLINE・彼の生活状況によって、具体的な進め方は変わります。</p>
             </div>
 
             <div id="keyword-section" class="keyword-section">
-                <h3 id="keyword-heading">あなたの回答を僕が直接確認します</h3>
-                <p id="keyword-copy">今後の動き方を考えてLINEでお送りします。</p>
+                <h3 id="keyword-heading">あなたと彼の場合を、僕が直接見ます</h3>
+                <p id="keyword-copy">診断だけでは決められない「具体的な進め方」を、回答内容に合わせて整理します。</p>
                 <p class="keyword-guide">この診断を受け取った公式LINEに戻り、<br>下の言葉をそのまま送ってください。</p>
-                <div id="result-keyword" class="keyword-box">未来設計</div>
+                <div id="result-keyword" class="keyword-box">私の現在地</div>
                 <button id="copy-keyword-btn" class="primary-btn">キーワードをコピーする</button>
                 <p id="copy-status" class="copy-status" aria-live="polite"></p>
-                <p class="keyword-note">この時点で電話相談への申し込みにはなりません。<br>回答内容を確認したうえで僕からお返事します。</p>
+                <p class="keyword-note">送った時点で電話相談への申し込みにはなりません。<br>まずはジローが回答内容を確認して、LINEでお返事します。</p>
             </div>
 
             <button id="close-btn" class="text-btn">画面を閉じてLINEに戻る</button>
         </section>
     </div>
 
-    <script src="main.js?v=3"></script>
+    <script src="main.js?v=4"></script>
 </body>
 
 </html>
