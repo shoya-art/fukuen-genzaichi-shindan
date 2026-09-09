@@ -1,144 +1,165 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ジロー式 復縁現在地診断</title>
-    <link rel="stylesheet" href="style.css?v=4">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap"
-        rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="20問で、あなたの恋愛反応と今の2人の現在地を整理するジロー式復縁カルテ。">
+  <meta property="og:title" content="ジロー式 あなた専用の復縁カルテ">
+  <meta property="og:description" content="20問で、恋愛反応・ハートの傷・今の2人の現在地を整理します。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shoya-art.github.io/fukuen-genzaichi-shindan/">
+  <meta property="og:image" content="https://shoya-art.github.io/fukuen-genzaichi-shindan/images/hero-couple-photo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>ジロー式 あなた専用の復縁カルテ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
-
 <body>
-    <div id="app" class="container">
-        <section id="start-screen" class="screen active">
-            <div class="hero-image-container">
-                <img src="images/hero-couple-photo.png" alt="笑顔で過ごすカップル" class="hero-photo">
-            </div>
-            <div class="title-container">
-                <p class="title-prefix">ジロー式</p>
-                <h1 class="main-title highlight">復縁現在地診断</h1>
-                <p class="title-suffix">今の自分と2人の現在地がわかる</p>
-            </div>
-            <p class="description">
-                この診断では、<br>
-                ① 恋愛の中でハートがどう揺れやすいか<br>
-                ② 今の2人が復縁までのどこにいるのか<br>
-                この2つを見ていきます。<br><br>
-                正解・不正解はありません。<br>
-                今の自分に一番近いものを選んでください☺️<br>
-                <span class="start-meta">全15問／約2〜3分</span>
-            </p>
-            <button id="start-btn" class="primary-btn">診断をスタートする</button>
-        </section>
+  <main id="app" class="container">
+    <section id="start-screen" class="screen active start-screen">
+      <div class="hero-image-container"><img src="images/hero-couple-photo.png" alt="笑顔で過ごすカップル" class="hero-photo"></div>
+      <p class="eyebrow">ジロー式</p>
+      <h1>あなた専用の<br><span>復縁カルテ</span></h1>
+      <p class="lead">20個の質問から、あなたの恋愛で起きていたことと、今の2人の現在地を整理します。</p>
+      <div class="benefit-list">
+        <p>✓ 恋愛で不安が起きていた仕組み</p>
+        <p>✓ ハートに残っている傷と背景</p>
+        <p>✓ 今の彼が感じていそうなこと</p>
+        <p>✓ 今やること・避けたいこと</p>
+      </div>
+      <div class="time-box"><strong>全20問</strong><span>約4〜5分</span></div>
+      <p class="start-note">正解・不正解はありません。<br>今の自分に一番近いものを選んでください。<br>答えにくい質問は「分からない」を選べます。</p>
+      <button id="start-btn" class="primary-btn">無料で復縁カルテを作成する</button>
+    </section>
 
-        <section id="profile-screen" class="screen">
-            <h2 class="question-text">診断を始める前に、<br>あなたのことを教えてください</h2>
-            <div class="profile-fields">
-                <label class="field-label" for="user-name-input">公式LINEで使用しているお名前</label>
-                <input type="text" id="user-name-input" class="name-input" placeholder="例：あやか" autocomplete="name">
-                <p class="name-sub-text">※必ず公式LINEと同じお名前を入力してください</p>
+    <section id="profile-screen" class="screen profile-screen">
+      <p class="screen-kicker">カルテを作る前に</p>
+      <h2>あなたのことを<br>教えてください</h2>
+      <div class="profile-fields">
+        <label for="user-name-input">公式LINEで使用しているお名前</label>
+        <input id="user-name-input" class="form-control" type="text" placeholder="例：あやか" autocomplete="name">
+        <small>必ず公式LINEと同じお名前を入力してください</small>
+        <label for="user-age-input">年齢</label>
+        <div class="age-row"><input id="user-age-input" class="form-control" type="number" min="15" max="99" inputmode="numeric" placeholder="例：28"><span>歳</span></div>
+        <label for="user-job-select">現在のお仕事</label>
+        <select id="user-job-select" class="form-control">
+          <option value="">選択してください</option><option>会社員・公務員</option><option>経営者・役員</option><option>自営業・フリーランス</option><option>学生（仕事もしている）</option><option>学生</option><option>パート・アルバイト</option><option>専業主婦</option><option>休職中</option><option>求職中</option><option>無職</option><option>その他</option>
+        </select>
+      </div>
+      <p id="profile-error" class="form-error" role="alert"></p>
+      <button id="profile-next-btn" class="primary-btn">20問の診断へ進む</button>
+    </section>
 
-                <label class="field-label" for="user-age-input">年齢</label>
-                <div class="age-input-row">
-                    <input type="number" id="user-age-input" class="name-input age-input" placeholder="例：28" min="15" max="99" inputmode="numeric">
-                    <span>歳</span>
-                </div>
+    <section id="question-screen" class="screen question-screen">
+      <div class="progress-head"><span id="progress-label">1 / 20</span><span id="phase-label">別れ方と今の2人</span></div>
+      <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+      <div id="branch-message" class="branch-message" hidden>あなたの状況に合わせて、<br>あと3つだけ詳しく確認します</div>
+      <p id="question-number" class="question-number">Q1</p>
+      <h2 id="question-text">質問</h2>
+      <p id="question-note" class="question-note"></p>
+      <div id="options-container" class="options-container"></div>
+      <button id="multi-next-btn" class="primary-btn" hidden>選んだ内容で次へ</button>
+      <button id="back-btn" class="back-btn" type="button">前の質問へ戻る</button>
+    </section>
 
-                <label class="field-label" for="user-job-select">現在のお仕事</label>
-                <select id="user-job-select" class="name-input profile-select">
-                    <option value="">選択してください</option>
-                    <option>会社員・公務員</option>
-                    <option>経営者・役員</option>
-                    <option>自営業・フリーランス</option>
-                    <option>学生（仕事もしている）</option>
-                    <option>学生</option>
-                    <option>パート・アルバイト</option>
-                    <option>専業主婦</option>
-                    <option>休職中</option>
-                    <option>求職中</option>
-                    <option>無職</option>
-                    <option>その他</option>
-                </select>
-            </div>
-            <p id="profile-error" class="form-error" role="alert"></p>
-            <button id="next-to-q-btn" class="primary-btn">質問に答える</button>
-        </section>
+    <section id="loading-screen" class="screen loading-screen">
+      <div class="loading-heart"><img src="images/heart-karute.png" alt="ハートを整えているイメージ"><span></span></div>
+      <h2>あなた専用の<br>復縁カルテを作成しています</h2>
+      <p>20問の回答をつなぎ合わせ、<br>あなたと彼の現在地を整理しています。</p>
+      <div class="analysis-list">
+        <div class="analysis-item"><b>✓</b>別れ方と現在の関係を確認</div>
+        <div class="analysis-item"><b>✓</b>恋愛中に起きていた反応を分析</div>
+        <div class="analysis-item"><b>✓</b>ハートに残っている傷を整理</div>
+        <div class="analysis-item"><b>✓</b>今の彼の気持ちを確認</div>
+        <div class="analysis-item"><b>✓</b>復縁までの現在地を判定</div>
+        <div class="analysis-item"><b>✓</b>今やること・避けたいことを作成</div>
+      </div>
+      <div class="loading-track"><div id="loading-bar"></div></div>
+      <p id="loading-status" class="loading-status">回答を読み込んでいます…</p>
+    </section>
 
-        <section id="question-screen" class="screen">
-            <div class="progress-wrapper">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <div class="question-header">
-                <span class="q-label"><span id="q-num">1</span> / 15</span>
-            </div>
-            <h2 id="question-text" class="question-text">質問テキスト</h2>
-            <p id="question-note" class="question-note"></p>
-            <div id="options-container" class="options-container"></div>
-            <button id="multi-next-btn" class="primary-btn multi-next-btn" hidden>選んだ内容で次へ</button>
-            <button id="back-btn" class="text-btn" style="display: none;">前の質問に戻る</button>
-        </section>
+    <section id="result-screen" class="screen result-screen">
+      <header class="result-hero">
+        <p>ジロー式・復縁カルテ</p>
+        <h2><span id="result-name">あなた</span>さんの<br>現在地が見えてきました</h2>
+        <div id="stage-badge" class="stage-badge">再会のブロック</div>
+        <img id="result-photo" src="images/result-a-couple.png" alt="診断結果を表すカップル">
+      </header>
 
-        <section id="loading-screen" class="screen">
-            <div class="loader"></div>
-            <h2 class="loading-title">診断結果を作成しています</h2>
-            <p class="loading-text">あなたの回答をもとに<br>2つの現在地を整理中...</p>
-            <div class="analysis-list">
-                <div class="analysis-item active"><span>✓</span>あなたのハートの揺れ方</div>
-                <div class="analysis-item"><span>✓</span>今の2人の復縁ステージ</div>
-                <div class="analysis-item"><span>✓</span>今から進める順番</div>
-            </div>
-            <p class="loading-wait">もう少しだけお待ちください</p>
-        </section>
+      <article class="karute-panel">
+        <div class="panel-label"><b>1</b>あなたの恋愛反応</div>
+        <h3 id="loop-title"></h3>
+        <div id="reaction-loop" class="reaction-loop"></div>
+        <p id="loop-copy"></p>
+      </article>
 
-        <section id="result-screen" class="screen">
-            <h2 class="result-label">あなたと彼の現在地が見えてきました</h2>
-            <div class="result-card">
-                <p id="result-stage" class="result-stage">今の2人のステージ</p>
-                <h3 id="result-title" class="result-title">結果タイトル</h3>
-                <div class="result-ill-wrapper">
-                    <img id="result-img" src="" alt="診断結果イメージ" class="result-illustration">
-                </div>
-                <p id="result-desc" class="result-desc">現在地の説明</p>
-            </div>
+      <article class="karute-panel heart-panel">
+        <div class="panel-label"><b>2</b>あなたのハートに残っている傷</div>
+        <h3 id="heart-title"></h3>
+        <div class="heart-map">
+          <img src="images/heart-karute.png" alt="回答から見えてきたハートの傷">
+          <div id="heart-tags" class="heart-tags"></div>
+        </div>
+        <p id="heart-copy"></p>
+      </article>
 
-            <div class="result-panel" data-label="あなた側の現在地">
-                <h3 id="heart-heading" class="panel-title"></h3>
-                <p id="heart-copy" class="panel-copy"></p>
-            </div>
+      <article class="karute-panel">
+        <div class="panel-label"><b>3</b>その傷ができた背景</div>
+        <h3>過去の体験と、今の考え方は<br>つながっているかもしれません</h3>
+        <div id="past-chain" class="past-chain"></div>
+        <p class="caution">過去の出来事を原因として断定するものではありません。あなた自身が選んだ回答から、考えられるつながりを整理しています。</p>
+      </article>
 
-            <div class="result-panel" data-label="2人側の現在地">
-                <h3 id="couple-heading" class="panel-title"></h3>
-                <p id="couple-copy" class="panel-copy"></p>
-            </div>
+      <article class="karute-panel">
+        <div class="panel-label"><b>4</b>回答から考えられる今の彼の気持ち</div>
+        <h3 id="partner-title"></h3>
+        <p id="partner-copy"></p>
+      </article>
 
-            <div class="result-panel priority-panel" data-label="今の優先順位">
-                <div id="priority-flow" class="priority-flow"></div>
-                <p id="priority-copy" class="panel-copy"></p>
-            </div>
+      <article class="karute-panel stage-panel">
+        <div class="panel-label"><b>5</b>別れ方から見る復縁ステージ</div>
+        <h3 id="stage-title"></h3>
+        <p id="stage-reason"></p>
+        <div class="stage-road">
+          <div data-stage="reply">返信</div><span>↓</span><div data-stage="remeet">再会</div><span>↓</span><div data-stage="reunion">復縁</div><span>↓</span><div data-stage="accelerator">アクセル</div>
+        </div>
+      </article>
 
-            <div class="result-panel" data-label="診断で分かること">
-                <p class="panel-copy">この診断で分かるのは、今の「現在地」と進める順番までです。同じ現在地でも、別れた理由・彼の性格・別れた後の行動・現在のLINE・彼の生活状況によって、具体的な進め方は変わります。</p>
-            </div>
+      <article class="karute-panel action-panel">
+        <div class="panel-label"><b>6</b>今やること・やらないこと</div>
+        <div class="action-box do"><h3>今やること</h3><ul id="do-list"></ul></div>
+        <div class="action-box dont"><h3>今はやらないこと</h3><ul id="dont-list"></ul></div>
+        <p class="judge-note">彼の一つの反応だけで、次の段階へ進んでいいとは限りません。ここは自分に都合よく判断せず、彼の言葉や反応を合わせて見ていく必要があります。</p>
+      </article>
 
-            <div id="keyword-section" class="keyword-section">
-                <h3 id="keyword-heading">あなたと彼の場合を、僕が直接見ます</h3>
-                <p id="keyword-copy">診断だけでは決められない「具体的な進め方」を、回答内容に合わせて整理します。</p>
-                <p class="keyword-guide">この診断を受け取った公式LINEに戻り、<br>下の言葉をそのまま送ってください。</p>
-                <div id="result-keyword" class="keyword-box">私の現在地</div>
-                <button id="copy-keyword-btn" class="primary-btn">キーワードをコピーする</button>
-                <p id="copy-status" class="copy-status" aria-live="polite"></p>
-                <p class="keyword-note">送った時点で電話相談への申し込みにはなりません。<br>まずはジローが回答内容を確認して、LINEでお返事します。</p>
-            </div>
+      <article class="karute-panel limit-panel">
+        <div class="panel-label"><b>7</b>カルテで分かるのは現在地まで</div>
+        <p>実際にいつ動くか、何を伝えるか、彼の反応をどう判断するかは、別れた理由・彼の性格・現在のLINEによって変わります。</p>
+      </article>
 
-            <button id="close-btn" class="text-btn">画面を閉じてLINEに戻る</button>
-        </section>
-    </div>
+      <article id="offer-panel" class="karute-panel offer-panel">
+        <p class="offer-kicker">ここまで見えてきたのに、<br>ここで終わるのはもったいないです</p>
+        <h3>ここからの復縁作戦を、<br>僕と一緒に考えましょう</h3>
+        <p>冷却期間を取る、連絡せずに待つ、自分磨きをする。よくある方法が、あなたと彼に合っているとは限りません。</p>
+        <p>今回のカルテをもとに、今は動くべきか、何から変えるか、どんな順番で復縁を目指すかを一緒に整理します。</p>
+        <div class="consult-points"><p>✓ 今の彼の気持ちを整理</p><p>✓ 動くか、待つかを判断</p><p>✓ あなた専用の進め方を設計</p></div>
+        <h4>ただ、誰にでも受けてほしいとは思っていません</h4>
+        <p>話だけ聞いて終わりたい方ではなく、自分自身とも向き合い、必要なことに取り組みたい方のための相談です。</p>
+        <p class="sales-note">僕から無理にサポートを押しつけることはありません。状況を見たうえで、サポートが必要で、僕が力になれると思った場合にだけご案内します。</p>
+        <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>自分自身とも向き合い、本気で復縁に向けて取り組みたいです</span></label>
+        <button id="consult-btn" class="primary-btn" disabled>ジローと復縁作戦を立てる</button>
+        <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
+      </article>
 
-    <script src="main.js?v=4"></script>
+      <article id="no-offer-panel" class="karute-panel no-offer-panel" hidden>
+        <h3>今は、まずあなた自身を守ることを優先してください</h3>
+        <p>今回の回答では、すぐに個別相談へ進むよりも、焦らず自分の生活と気持ちを落ち着けることが大切だと考えられます。</p>
+      </article>
+      <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
+    </section>
+  </main>
+  <script src="main.js?v=5"></script>
 </body>
-
 </html>
