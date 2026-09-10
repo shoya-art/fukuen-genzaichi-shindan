@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <main id="app" class="container">
@@ -101,32 +101,33 @@
     <section id="result-screen" class="screen result-screen">
       <header class="result-hero">
         <p>ジロー式・復縁カルテ</p>
-        <h2><span id="result-name">あなた</span>さんの<br>現在地が見えてきました</h2>
-        <div id="stage-badge" class="stage-badge">再会のブロック</div>
+        <h2><span id="result-name" class="result-person-name">あなた</span>さんにぴったりの<br>復縁方法が見つかりました</h2>
         <img id="result-photo" src="images/result-a-couple.png" alt="診断結果を表すカップル">
       </header>
 
       <article class="karute-panel">
-        <div class="panel-label"><b>1</b>あなたの恋愛反応</div>
+        <div class="panel-label"><b>1</b><span><span class="result-person-name">あなた</span>さんの恋愛傾向</span></div>
         <h3 id="loop-title"></h3>
         <div id="reaction-loop" class="reaction-loop"></div>
         <p id="loop-copy"></p>
       </article>
 
       <article class="karute-panel heart-panel">
-        <div class="panel-label"><b>2</b>あなたのハートに残っている傷</div>
+        <div class="panel-label"><b>2</b><span><span class="result-person-name">あなた</span>さんのハートに残っている欠け</span></div>
         <h3 id="heart-title"></h3>
         <div class="heart-map">
-          <img src="images/heart-karute.png" alt="回答から見えてきたハートの傷">
+          <img src="images/heart-karute-v2.png" alt="回答から見えてきたハートの欠け">
           <div id="heart-tags" class="heart-tags"></div>
         </div>
         <p id="heart-copy"></p>
       </article>
 
       <article class="karute-panel">
-        <div class="panel-label"><b>3</b>その傷ができた背景</div>
-        <h3>過去の体験と、今の考え方は<br>つながっているかもしれません</h3>
+        <div class="panel-label"><b>3</b><span><span class="result-person-name">あなた</span>さんが不安になりやすい理由</span></div>
+        <h3>過去の体験から、今の不安が<br>生まれている可能性があります</h3>
         <div id="past-chain" class="past-chain"></div>
+        <p id="past-copy"></p>
+        <p id="pattern-impact" class="pattern-impact"></p>
         <p class="caution">過去の出来事を原因として断定するものではありません。あなた自身が選んだ回答から、考えられるつながりを整理しています。</p>
       </article>
 
@@ -158,15 +159,17 @@
       </article>
 
       <article id="offer-panel" class="karute-panel offer-panel">
-        <p class="offer-kicker">ここまで見えてきたのに、<br>ここで終わるのはもったいないです</p>
         <h3>ここからの復縁作戦を、<br>僕と一緒に考えましょう</h3>
-        <p>冷却期間を取る、連絡せずに待つ、自分磨きをする。よくある方法が、あなたと彼に合っているとは限りません。</p>
-        <p>今回のカルテをもとに、今は動くべきか、何から変えるか、どんな順番で復縁を目指すかを一緒に整理します。</p>
-        <div class="consult-points"><p>✓ 今の彼の気持ちを整理</p><p>✓ 動くか、待つかを判断</p><p>✓ あなた専用の進め方を設計</p></div>
+        <p>冷却期間を取る<br>連絡せずに待つ<br>自分磨きをする</p>
+        <p>こうした、よくある復縁方法が、あなたと彼に合っているとは限りません。</p>
+        <p>今回の復縁カルテをもとに、</p>
+        <div class="consult-points"><p>✓ 今、何から変えるべきか</p><p>✓ どんな順番で復縁を目指すべきか</p><p>✓ 次にどんな行動をするべきか</p></div>
+        <p>を、僕が一緒に整理して直接お伝えします。</p>
         <h4>ただ、誰にでも受けてほしいとは思っていません</h4>
         <p>話だけ聞いて終わりたい方ではなく、自分自身とも向き合い、必要なことに取り組みたい方のための相談です。</p>
-        <p class="sales-note">僕から無理にサポートを押しつけることはありません。状況を見たうえで、サポートが必要で、僕が力になれると思った場合にだけご案内します。</p>
+        <p class="sales-note">僕から無理にサポートを押しつけたり、強引に勧誘することはありません。まずは、あなたと彼の復縁作戦を一緒に考えるための相談です。</p>
         <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>自分自身とも向き合い、本気で復縁に向けて取り組みたいです</span></label>
+        <label class="commit-check"><input id="support-checkbox" type="checkbox"><span>必要であれば、自分に合ったサポートの提案を受けても大丈夫です<br><small>（押し売りや強引な勧誘はありません）</small></span></label>
         <button id="consult-btn" class="primary-btn" disabled>ジローと復縁作戦を立てる</button>
         <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
       </article>
@@ -178,6 +181,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=7"></script>
+  <script src="main.js?v=9"></script>
 </body>
 </html>

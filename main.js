@@ -4,15 +4,16 @@ const question = (key, text, options, data = {}) => ({ key, text, options, ...da
 const coreQuestions = [
   question('elapsed', '彼と別れてから、<br>どのくらい経ちますか？', ['1ヶ月未満','1〜3ヶ月','3〜6ヶ月','6ヶ月〜1年','1年以上','まだ正式には別れていない']),
   question('initiator', '別れを最初に切り出したのは<br>どちらですか？', ['彼から','自分から','話し合って決めた','自然消滅に近い','はっきり別れていない']),
-  question('breakup_style', '別れ方で一番近いものは<br>どれですか？', ['落ち着いて話し合って別れた','彼から一方的に別れを告げられた','喧嘩や感情的なやり取りの中で別れた','何度も別れ話が出た末に別れた','連絡が減り、自然に関係が終わった','自分から別れた後、復縁したくなった','まだ関係が曖昧なまま','その他・よく分からない']),
+  question('breakup_style', '別れ方で一番近いものは<br>どれですか？', ['落ち着いて話し合って別れた','彼から一方的に別れを告げられた','喧嘩や感情的なやり取りの中で別れた','何度も別れ話が出た末に別れた','連絡が減り、自然に関係が終わった','自分から別れを切り出した','別れた後も、恋人のような関係が続いている','その他']),
   question('breakup_reason', '彼から伝えられた別れの理由で、<br>一番近いものはどれですか？', ['気持ちが冷めた','好きか分からなくなった','喧嘩やすれ違いに疲れた','束縛や愛情確認が負担だった','性格や価値観が合わないと言われた','仕事・遠距離・家族など環境の問題','他に気になる人や恋人ができた','今は恋愛をする余裕がない','理由をはっきり言われていない','自分から別れたため、彼から理由は聞いていない']),
   question('breakup_words', '別れ際や別れた後、<br>彼から言われた言葉はありますか？', [
     option('「また同じことになると思う」',{flag:'same_again'}), option('「もう好きじゃない」',{flag:'not_love'}),
+    option('「仕事が忙しく、恋愛に時間を使えない」',{flag:'work_busy'}), option('「関係に少し疲れた」',{flag:'relationship_tired'}),
     option('「今は恋愛を考えられない」',{flag:'no_romance'}), option('「友達ならいい」',{flag:'friends_only'}),
     option('「復縁は考えていない」',{flag:'no_reunion'}), option('「少し時間が欲しい」',{flag:'need_space'}),
     option('「連絡しないでほしい」',{flag:'contact_refused'}), option('「嫌いになったわけではない」',{flag:'not_hate'}),
-    option('特に言われていない',{exclusive:true}), option('よく覚えていない',{exclusive:true})
-  ], { multiple:true, note:'当てはまるものをすべて選んでください' }),
+    option('特に言われていない',{exclusive:true})
+  ], { multiple:true, note:'複数選択できます。当てはまるものをすべて選んでください' }),
   question('relationship_status', '現在のお二人の状況を<br>教えてください。', [
     option('お互い特定の交際相手はいない'), option('彼に気になる女性がいる可能性がある',{flag:'possible_other'}),
     option('彼に新しい恋人がいる',{flag:'new_partner'}), option('自分に現在の交際相手がいる',{flag:'user_partner'}),
@@ -27,7 +28,7 @@ const coreQuestions = [
     option('返信が遅くなった時',{tag:'abandonment'}), option('会える回数が減った時',{tag:'abandonment'}),
     option('愛情表現が減った時',{tag:'love_check'}), option('彼の機嫌が悪い時',{tag:'over_adapt'}),
     option('他の女性の存在を感じた時',{tag:'betrayal'}), option('彼が仕事や趣味を優先した時',{tag:'comparison'}),
-    option('喧嘩や意見の違いが起きた時',{tag:'self_suppress'}), option('特に強く不安になることはなかった',{heart:0}), option('自分ではまだ分からない',{heart:1})
+    option('喧嘩や意見の違いが起きた時',{tag:'self_suppress'}), option('特に強く不安になることはなかった',{heart:0})
   ]),
   question('thought', '不安になった時、頭の中に<br>浮かびやすかった言葉はどれですか？', [
     option('「嫌われたかもしれない」',{heart:2,tag:'abandonment'}), option('「他に好きな人ができたかもしれない」',{heart:2,tag:'betrayal'}),
@@ -41,7 +42,7 @@ const coreQuestions = [
     option('嫌われないように彼へ合わせた',{heart:2,tag:'over_adapt'}), option('言いたいことを我慢した',{heart:2,tag:'self_suppress'}),
     option('自分が悪いと思って何度も謝った',{heart:2,tag:'self_blame'}), option('悲しさや怒りを彼にぶつけた',{heart:3,tag:'emotional'}),
     option('何も言わず、一人で抱え込んだ',{heart:2,tag:'self_suppress'}), option('自分の生活へ気持ちを戻せていた',{heart:0,exclusive:true})
-  ], { multiple:true, note:'当てはまるものをすべて選んでください', heartCap:5 }),
+  ], { multiple:true, note:'複数選択できます。当てはまるものをすべて選んでください', heartCap:5 }),
   question('self_abandon', '彼との関係で、自分を後回しに<br>していたことはありますか？', [
     option('自分の予定より彼を優先していた',{heart:2,tag:'partner_centered'}), option('彼の機嫌を悪くしないことを優先していた',{heart:2,tag:'over_adapt'}),
     option('嫌なことでも断れなかった',{heart:2,tag:'self_suppress'}), option('本音を伝えずに我慢していた',{heart:2,tag:'self_suppress'}),
@@ -54,7 +55,7 @@ const coreQuestions = [
     option('返信を遅らせたり、距離を取った',{partner:3}), option('喧嘩や言い合いになった',{partner:3}),
     option('彼も感情的になった',{partner:2}), option('自分が我慢していたため、彼は気づいていなかった',{partner:1}), option('よく分からない',{partner:1})
   ]),
-  question('repeat_pattern', '過去の恋愛でも、<br>似たことはありましたか？', [
+  question('repeat_pattern', '過去に付き合った相手とも、<br>似たようなことはありましたか？', [
     option('毎回、嫌われることが不安になった',{heart:2,tag:'abandonment'}), option('相手に合わせすぎることが多かった',{heart:2,tag:'over_adapt'}),
     option('愛されているか確認したくなった',{heart:2,tag:'love_check'}), option('我慢して、最後に感情が爆発した',{heart:3,tag:'emotional'}),
     option('相手の反応で生活や気分が変わった',{heart:3,tag:'partner_centered'}), option('過去の恋愛でも相手を追いかけた',{heart:3,tag:'abandonment'}),
@@ -67,16 +68,16 @@ const coreQuestions = [
     option('彼の反応で一日の気分が大きく変わる',{heart:3,tag:'partner_centered'}), option('今は自分が何をしたいかも分からない',{heart:3,tag:'partner_centered'})
   ]),
   question('past_experience', 'これまでの経験で、<br>心当たりがあるものを教えてください。', [
-    option('大切な人が突然離れていった経験がある',{past:'大切な人が突然離れていった経験',tag:'abandonment'}),
-    option('家族や周囲から人と比べられることが多かった',{past:'人と比べられることが多かった経験',tag:'comparison'}),
-    option('頑張った時だけ認めてもらえる感覚があった',{past:'頑張った時に認められた経験',tag:'worth'}),
-    option('自分の気持ちを伝えて否定されたことがある',{past:'気持ちを伝えて否定された経験',tag:'self_suppress'}),
-    option('周りに合わせることで関係を保ってきた',{past:'周りに合わせて関係を保った経験',tag:'over_adapt'}),
-    option('信じていた人に裏切られたことがある',{past:'信じていた人に裏切られた経験',tag:'betrayal'}),
-    option('過去の恋愛で強く傷ついた',{past:'過去の恋愛で強く傷ついた経験',tag:'abandonment'}),
-    option('家族の機嫌を気にして過ごすことが多かった',{past:'周囲の機嫌を気にして過ごした経験',tag:'over_adapt'}),
+    option('親が厳しく、顔色や期待を気にして育った',{past:'親の顔色や期待を気にして育った経験',tag:'over_adapt'}),
+    option('学生時代に、仲間外れやいじめにあったことがある',{past:'学生時代の仲間外れやいじめの経験',tag:'abandonment'}),
+    option('過去に付き合った相手から、浮気や裏切りを受けた',{past:'過去の恋人から浮気や裏切りを受けた経験',tag:'betrayal'}),
+    option('両親が離婚し、片親の家庭で育った',{past:'両親の離婚や片親の家庭で育った経験',tag:'abandonment'}),
+    option('父親または母親から、十分な愛情を感じられなかった',{past:'親から十分な愛情を感じられなかった経験',tag:'worth'}),
+    option('頑張った時だけ認めてもらえると感じていた',{past:'頑張った時だけ認めてもらえると感じた経験',tag:'worth'}),
+    option('自分の気持ちを伝えて、否定されたことがある',{past:'自分の気持ちを否定された経験',tag:'self_suppress'}),
+    option('家族の機嫌を気にして過ごすことが多かった',{past:'家族の機嫌を気にして過ごした経験',tag:'over_adapt'}),
     option('特に思い当たらない',{exclusive:true}), option('分からない・答えたくない',{exclusive:true})
-  ], { multiple:true, note:'無理に思い出さなくて大丈夫です', heartCap:0 }),
+  ], { multiple:true, note:'複数選択できます。無理に思い出さなくて大丈夫です', heartCap:0 }),
   question('belief', 'その経験から感じるようになったことで、<br>近いものはありますか？', [
     option('そのままの自分では愛されない',{belief:'そのままの自分では愛されない',heart:2,tag:'worth'}),
     option('相手に合わせないと嫌われる',{belief:'相手に合わせないと嫌われる',heart:2,tag:'over_adapt'}),
@@ -86,21 +87,23 @@ const coreQuestions = [
     option('自分が我慢すれば関係は続く',{belief:'自分が我慢すれば関係は続く',heart:2,tag:'self_suppress'}),
     option('誰かに必要とされないと自信が持てない',{belief:'誰かに必要とされないと自信が持てない',heart:2,tag:'worth'}),
     option('人を信じすぎると傷つく',{belief:'人を信じすぎると傷つく',heart:2,tag:'betrayal'}),
-    option('特に思い当たらない',{belief:'まだ明確ではない',heart:0}), option('分からない・答えたくない',{belief:'まだ明確ではない',heart:0})
-  ]),
-  question('desired_relation', '復縁できた先で、<br>どんな関係を作りたいですか？', ['お互いに本音を伝えられる関係','前と同じ問題を繰り返さない関係','お互いの生活も大切にできる関係','不安になっても話し合える関係','安心して一緒にいられる関係','結婚や将来まで考えられる関係','とにかくもう一度付き合いたい','まだそこまでは考えられない'])
+    option('特に思い当たらない',{belief:'まだ明確ではない',heart:0,exclusive:true}), option('分からない・答えたくない',{belief:'まだ明確ではない',heart:0,exclusive:true})
+  ], { multiple:true, note:'複数選択できます。当てはまるものをすべて選んでください', heartCap:6 }),
+  question('desired_relation', '彼と復縁した後、<br>どんな二人でいたいですか？', [
+    option('お互いに本音を伝えられる二人'),option('前と同じ問題を繰り返さない二人'),option('お互いの生活も大切にできる二人'),option('不安になっても話し合える二人'),option('安心して一緒にいられる二人'),option('結婚や将来まで考えられる二人'),option('とにかく、もう一度付き合いたい',{exclusive:true}),option('まだそこまでは考えられない',{exclusive:true})
+  ], { multiple:true, note:'複数選択できます。近いものをすべて選んでください' })
 ];
 
 const contactBranch = [
-  question('reply_state', '現在の返信で、<br>一番近いものはどれですか？', [
+  question('reply_state', '彼との現在のやり取りで、<br>一番近いものはどれですか？', [
     option('彼から連絡が来る',{reply:0}), option('送れば普通に返信が来る',{reply:0}), option('彼から質問や話題が出る',{reply:0,positive:1}),
     option('用事がある時だけ返信が来る',{reply:1}), option('返信は遅いが返ってくる',{reply:1}), option('既読・未読スルーが多い',{reply:3}),
     option('そっけない・必要最低限',{reply:2}), option('別れてからまだ連絡していない',{reply:2})
   ]),
-  question('meeting_state', '会うことについて、<br>彼はどんな反応ですか？', [
-    option('彼から会おうと言われる',{meeting:0,positive:2}), option('誘えば会える可能性が高い',{meeting:0}),
-    option('誘ったが予定が合わなかった',{meeting:1}), option('誘ったが断られた',{meeting:3}),
-    option('会う話を避けられている',{meeting:3}), option('まだ誘っていない',{meeting:2}), option('今は誘える状態ではない',{meeting:3})
+  question('meeting_state', 'あなたが「会おう」と伝えたら、<br>彼はどんな反応をしそうですか？', [
+    option('喜んで予定を合わせてくれそう',{meeting:0,positive:2}), option('予定が合えば会ってくれそう',{meeting:0}),
+    option('予定が合わないと言われそう',{meeting:1}), option('やんわり断られそう',{meeting:3}),
+    option('会う話を避けられそう',{meeting:3}), option('すでに誘って断られた',{meeting:3}), option('今はまだ想像できない',{meeting:2})
   ]),
   question('interaction_state', '今の彼との会話や空気感で、<br>近いものを教えてください。', [
     option('彼から楽しそうに話してくれる',{reunion:0,positive:2}), option('以前より自然で落ち着いた雰囲気',{reunion:0,positive:2}),
@@ -283,7 +286,8 @@ function buildDiagnosis() {
   }
   const heartLevel = heartScore <= 5 ? 'steady' : heartScore <= 12 ? 'swayed' : 'affected';
   const past = selectedByKey('past_experience').filter(opt => opt.past).map(opt => opt.past);
-  const belief = (selectedByKey('belief')[0] || {}).belief || 'まだ明確ではない';
+  const beliefs = selectedByKey('belief').map(opt => opt.belief).filter(value => value && value !== 'まだ明確ではない');
+  const belief = beliefs.length ? beliefs.slice(0,2).join('・') : 'まだ明確ではない';
   const excludedJobs = ['学生','パート・アルバイト','求職中','無職'];
   const exclusions = [];
   if (excludedJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
@@ -295,11 +299,15 @@ function buildDiagnosis() {
 function partnerMessage() {
   const flags = new Set(diagnosis.flags);
   const reaction = selectedByKey('partner_reaction')[0] || {};
-  if (flags.has('contact_refused') || flags.has('blocked')) return ['今は、自分の気持ちと距離を尊重してほしいと思っていそうです','完全に嫌いだと決めつける必要はありません。ただ、現時点では関係を進めることよりも、彼が求めている距離を守ることが必要です。'];
+  const contact = selectedByKey('contact_path')[0] || {};
+  if (flags.has('contact_refused') || flags.has('blocked')) return ['今は、自分の気持ちと距離を尊重してほしいと思っていそうです','完全に嫌いだと決めつける必要はありません。ただ、今は彼が求めている距離を守ることで、これ以上警戒を強めないことが大切です。'];
+  if (flags.has('work_busy')) return ['あなたを嫌いというより、今は恋愛に向き合う余裕がなくなっていそうです','仕事が忙しいという言葉の裏には、関係を完全に切りたい気持ちではなく、恋愛に使える心や時間が足りない状態が考えられます。負担の少ない関わり方から、安心感を作り直せる可能性があります。'];
+  if (flags.has('relationship_tired')) return ['あなたを嫌いというより、以前と同じ関わり方になることに疲れや不安を感じていそうです','関係そのものを否定しているというより、同じすれ違いを繰り返すことを避けたい気持ちが強い可能性があります。以前とは違う安心感を体験してもらうことが必要です。'];
   if (flags.has('same_again')) return ['「また同じ関係になるかもしれない」と不安を感じていそうです','あなたへの気持ちだけではなく、以前と同じ不安ややり取りが繰り返されることを心配している可能性があります。'];
   if (flags.has('friends_only')) return ['関係を切りたいわけではないものの、恋愛に戻ることには迷いがありそうです','まずは安心して関われる相手として、以前とは違う関係を体験してもらうことが大切です。'];
   if ((reaction.partner || 0) >= 2) return ['あなたを嫌いというより、どう向き合えばいいか迷っていそうです','気持ちを確認された時に、安心させ続けなければならない負担や、少し距離を置きたい気持ちが生まれていた可能性があります。'];
-  return ['あなたとの関係を完全に終わらせたい状態とは限りません','今は焦って答えを求めるよりも、安心して関われる時間を重ねながら、彼の気持ちを見ていく必要があります。'];
+  if (contact.contact < 3) return ['あなたとのつながりを、完全に手放した状態ではなさそうです','連絡手段や接点が残っていることは、少なくとも今すぐ関係を完全に切ろうとしていないサインの一つです。焦って答えを求めず、安心して関われる時間を重ねることで、気持ちが動く余地はあります。'];
+  return ['あなたとの関係を完全に終わらせたい状態とは限りません','今は無理に距離を縮めず、彼の気持ちを尊重しながら、関係を悪化させないことが次の可能性につながります。'];
 }
 
 function stageReason() {
@@ -318,8 +326,7 @@ const actionContent = {
 function renderResult() {
   const stage = stageData[diagnosis.stage];
   const partner = partnerMessage();
-  $('result-name').textContent = profile.name;
-  $('stage-badge').textContent = stage.label;
+  document.querySelectorAll('.result-person-name').forEach(node => { node.textContent = profile.name; });
   $('result-photo').src = stage.photo;
   const trigger = optionText('trigger');
   const thought = optionText('thought');
@@ -327,13 +334,16 @@ function renderResult() {
   const reaction = optionText('partner_reaction');
   $('loop-title').textContent = `「${thought.replace(/[「」]/g,'')}」と感じた時に、行動が起きやすかったようです`;
   $('reaction-loop').innerHTML = [trigger,thought,actions,reaction,'さらに不安が大きくなる'].map((text,index) => `<div class="loop-step">${text}</div>${index < 4 ? '<span>↓</span>' : ''}`).join('');
-  $('loop-copy').textContent = 'これは「あなたが悪い」という話ではありません。不安を彼によって落ち着かせようとした結果、2人の間で同じ流れが繰り返されていた可能性があります。';
+  $('loop-copy').textContent = `${profile.name}さんは、不安を彼の反応で落ち着かせようとした結果、気持ちを確認したり、自分を後回しにしたりする流れが起きやすかった可能性があります。これは性格が悪いからではなく、不安から自分を守ろうとした反応です。`;
   const topTags = diagnosis.tags.slice(0,3);
   $('heart-title').textContent = diagnosis.belief === 'まだ明確ではない' ? '今は、彼の反応によってハートが揺れやすくなっています' : `「${diagnosis.belief}」という不安が表れている可能性があります`;
   $('heart-tags').innerHTML = topTags.map(tag => `<span>${tagLabels[tag]}</span>`).join('');
-  $('heart-copy').textContent = '僕は、自分の中でまだ満たせていない部分を「ハートの欠け」と呼んでいます。この傷は性格の問題ではなく、自分で安心を作れるように整えていけるものです。';
-  const pastText = diagnosis.past.length ? diagnosis.past.slice(0,2).join('・') : 'まだ明確になっていない過去の体験';
+  $('heart-copy').textContent = `${profile.name}さんの回答内容を見ると、彼へ愛情を求めすぎたり、嫌われないように自分を抑えたりする傾向が起きやすいようです。この満たされていない部分が「ハートの欠け」として恋愛中に反応している可能性があります。`;
+  const hasPast = diagnosis.past.length > 0;
+  const pastText = hasPast ? diagnosis.past.slice(0,2).join('・') : 'まだ言葉になっていない過去の体験';
   $('past-chain').innerHTML = `<div>${pastText}</div><span>↓</span><div>「${diagnosis.belief}」という考え方</div><span>↓</span><div>${trigger}にハートが反応</div><span>↓</span><div>${actions}</div>`;
+  $('past-copy').textContent = hasPast ? `${pastText}を経験したことで、「${diagnosis.belief}」という考え方が作られた可能性があります。だから、${trigger}に「嫌われるかもしれない」「離れていくかもしれない」という不安が反応し、${actions}という行動につながりやすくなっていたと考えられます。` : `今回の回答だけでは、過去のどの体験とつながっているかまでは断定できません。ただ、${trigger}に不安が反応し、${actions}という行動につながりやすくなっていたことが見えてきます。`;
+  $('pattern-impact').textContent = 'この恋愛傾向は、今の彼との復縁だけでなく、今後の恋愛にも影響します。彼との関係だけを変えるのではなく、不安が起きる仕組みから整えることが大切です。';
   $('partner-title').textContent = partner[0];
   $('partner-copy').textContent = partner[1];
   $('stage-title').textContent = stage.title;
@@ -361,9 +371,9 @@ function finishDiagnosis() {
     items[index].classList.add('done');
     $('loading-status').textContent = status;
     $('loading-bar').style.width = `${((index + 1) / statuses.length) * 100}%`;
-  }, index * 600));
-  window.setTimeout(() => { $('loading-status').textContent = 'あなた専用の復縁カルテが完成しました'; }, 3650);
-  window.setTimeout(renderResult, 4300);
+  }, index * 900));
+  window.setTimeout(() => { $('loading-status').textContent = 'あなた専用の復縁カルテが完成しました'; }, 5700);
+  window.setTimeout(renderResult, 6800);
 }
 
 function answerSummary(index) {
@@ -446,7 +456,9 @@ document.addEventListener('DOMContentLoaded',() => {
     track('question_back',{from_question:currentIndex + 1,to_question:currentIndex});
     currentIndex -= 1; renderQuestion();
   });
-  $('commit-checkbox').addEventListener('change',event => { $('consult-btn').disabled = !event.target.checked; });
+  const updateConsultButton = () => { $('consult-btn').disabled = !$('commit-checkbox').checked || !$('support-checkbox').checked; };
+  $('commit-checkbox').addEventListener('change',updateConsultButton);
+  $('support-checkbox').addEventListener('change',updateConsultButton);
   $('consult-btn').addEventListener('click',() => {
     $('line-instruction').hidden = false;
     $('line-instruction').scrollIntoView({behavior:'smooth',block:'center'});
