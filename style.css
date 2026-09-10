@@ -26,11 +26,11 @@ button,input,select{font:inherit}
 
 .profile-screen{justify-content:center;text-align:center}
 .profile-screen h2{margin:4px 0 24px;font-size:24px;line-height:1.5;color:#333}
-.partner-profile-screen h2{margin-bottom:13px}
-.profile-purpose{margin:0 0 18px;padding:12px 13px;border-radius:12px;background:var(--pink-pale);color:#74696c;font-size:11px;line-height:1.75;text-align:left}
+.partner-profile-screen h2{margin-bottom:20px}
 .profile-fields{display:flex;flex-direction:column;text-align:left;gap:8px}
 .profile-fields label{margin-top:7px;font-size:13px;font-weight:700}
 .profile-fields small{color:var(--muted);font-size:11px;text-align:center}
+.profile-fields .field-note{margin-top:-2px;color:#9b9093;font-size:9px;line-height:1.65;text-align:left}
 .form-control{width:100%;padding:14px;border:2px solid var(--border);border-radius:12px;background:#fff;color:var(--text);text-align:center;outline:none}
 .form-control:focus{border-color:var(--pink);background:#fffafb}
 .age-row{display:flex;align-items:center;gap:10px}.age-row span{font-weight:700}
