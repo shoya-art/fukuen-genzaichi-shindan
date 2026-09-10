@@ -162,12 +162,12 @@ const stageData = {
 let questions = [...coreQuestions];
 let answers = Array(20).fill(null);
 let currentIndex = 0;
-let profile = { name:'', age:'', job:'' };
+let profile = { name:'', age:'', job:'', income:'', partnerAge:'', partnerJob:'', partnerIncome:'' };
 let diagnosis = null;
 let completed = false;
 
 const $ = id => document.getElementById(id);
-const screens = ['start-screen','profile-screen','question-screen','loading-screen','result-screen'];
+const screens = ['start-screen','profile-screen','partner-profile-screen','question-screen','loading-screen','result-screen'];
 
 function showScreen(id) {
   screens.forEach(screenId => $(screenId).classList.toggle('active', screenId === id));
@@ -389,7 +389,7 @@ function submitToGoogleForm() {
   form.hidden = true;
   const data = {
     'entry.808125093':profile.name,
-    'entry.1761508389':`年齢:${profile.age}｜職業:${profile.job}`,
+    'entry.1761508389':`本人年齢:${profile.age}｜本人職業:${profile.job}｜本人年収:${profile.income}｜彼年齢:${profile.partnerAge}｜彼職業:${profile.partnerJob}｜彼年収:${profile.partnerIncome}`,
     'entry.1005036062':groupedAnswers(0,2),
     'entry.199990545':groupedAnswers(3,5),
     'entry.838626022':groupedAnswers(6,8),
@@ -414,14 +414,28 @@ document.addEventListener('DOMContentLoaded',() => {
     const name = $('user-name-input').value.trim();
     const age = Number($('user-age-input').value);
     const job = $('user-job-select').value;
+    const income = $('user-income-select').value;
     if (!name) return $('profile-error').textContent = '公式LINEで使用しているお名前を入力してください。';
     if (!Number.isInteger(age) || age < 15 || age > 99) return $('profile-error').textContent = '年齢を半角数字で入力してください。';
     if (!job) return $('profile-error').textContent = '現在のお仕事を選択してください。';
-    profile = { name,age,job };
+    if (!income) return $('profile-error').textContent = '現在の年収に近いものを選択してください。';
+    profile = { ...profile,name,age,job,income };
     $('profile-error').textContent = '';
+    showScreen('partner-profile-screen');
+  });
+  $('partner-profile-next-btn').addEventListener('click',() => {
+    const partnerAge = Number($('partner-age-input').value);
+    const partnerJob = $('partner-job-select').value;
+    const partnerIncome = $('partner-income-select').value;
+    if (!Number.isInteger(partnerAge) || partnerAge < 15 || partnerAge > 99) return $('partner-profile-error').textContent = '彼の年齢を半角数字で入力してください。';
+    if (!partnerJob) return $('partner-profile-error').textContent = '彼の現在のお仕事を選択してください。';
+    if (!partnerIncome) return $('partner-profile-error').textContent = '彼の現在の年収に近いものを選択してください。';
+    profile = { ...profile,partnerAge,partnerJob,partnerIncome };
+    $('partner-profile-error').textContent = '';
     questions = [...coreQuestions]; answers = Array(20).fill(null); currentIndex = 0; completed = false;
     track('diagnosis_start'); renderQuestion(); showScreen('question-screen');
   });
+  $('partner-profile-back-btn').addEventListener('click',() => showScreen('profile-screen'));
   $('multi-next-btn').addEventListener('click',() => {
     if (!answers[currentIndex] || answers[currentIndex].length === 0) return;
     track('question_answered',{question_number:currentIndex + 1,question_key:questions[currentIndex].key});

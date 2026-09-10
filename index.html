@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <main id="app" class="container">
@@ -30,6 +30,7 @@
     <section id="profile-screen" class="screen profile-screen">
       <p class="screen-kicker">カルテを作る前に</p>
       <h2>あなたのことを<br>教えてください</h2>
+      <p class="profile-purpose">あなたに合った、無理のないデートプランや彼への接し方を考えるために使用します。</p>
       <div class="profile-fields">
         <label for="user-name-input">公式LINEで使用しているお名前</label>
         <input id="user-name-input" class="form-control" type="text" placeholder="例：あやか" autocomplete="name">
@@ -40,9 +41,34 @@
         <select id="user-job-select" class="form-control">
           <option value="">選択してください</option><option>会社員・公務員</option><option>経営者・役員</option><option>自営業・フリーランス</option><option>学生（仕事もしている）</option><option>学生</option><option>パート・アルバイト</option><option>専業主婦</option><option>休職中</option><option>求職中</option><option>無職</option><option>その他</option>
         </select>
+        <label for="user-income-select">現在の年収</label>
+        <select id="user-income-select" class="form-control">
+          <option value="">選択してください</option><option>200万円未満</option><option>200〜299万円</option><option>300〜399万円</option><option>400〜499万円</option><option>500〜699万円</option><option>700〜999万円</option><option>1,000万円以上</option><option>答えたくない</option>
+        </select>
       </div>
       <p id="profile-error" class="form-error" role="alert"></p>
-      <button id="profile-next-btn" class="primary-btn">20問の診断へ進む</button>
+      <button id="profile-next-btn" class="primary-btn">彼のことを入力する</button>
+    </section>
+
+    <section id="partner-profile-screen" class="screen profile-screen partner-profile-screen">
+      <p class="screen-kicker">続いて</p>
+      <h2>彼のことも<br>教えてください</h2>
+      <p class="profile-purpose">お二人に合った、無理のないデートの誘い方や過ごし方、彼への接し方を考えるために使用します。</p>
+      <div class="profile-fields">
+        <label for="partner-age-input">彼の年齢</label>
+        <div class="age-row"><input id="partner-age-input" class="form-control" type="number" min="15" max="99" inputmode="numeric" placeholder="例：30"><span>歳</span></div>
+        <label for="partner-job-select">彼の現在のお仕事</label>
+        <select id="partner-job-select" class="form-control">
+          <option value="">選択してください</option><option>会社員・公務員</option><option>経営者・役員</option><option>自営業・フリーランス</option><option>学生（仕事もしている）</option><option>学生</option><option>パート・アルバイト</option><option>休職中</option><option>求職中</option><option>無職</option><option>その他</option><option>分からない</option>
+        </select>
+        <label for="partner-income-select">彼の現在の年収</label>
+        <select id="partner-income-select" class="form-control">
+          <option value="">選択してください</option><option>200万円未満</option><option>200〜299万円</option><option>300〜399万円</option><option>400〜499万円</option><option>500〜699万円</option><option>700〜999万円</option><option>1,000万円以上</option><option>分からない</option><option>答えたくない</option>
+        </select>
+      </div>
+      <p id="partner-profile-error" class="form-error" role="alert"></p>
+      <button id="partner-profile-next-btn" class="primary-btn">20問の診断へ進む</button>
+      <button id="partner-profile-back-btn" class="back-btn" type="button">自分の入力へ戻る</button>
     </section>
 
     <section id="question-screen" class="screen question-screen">
@@ -153,6 +179,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=5"></script>
+  <script src="main.js?v=7"></script>
 </body>
 </html>
