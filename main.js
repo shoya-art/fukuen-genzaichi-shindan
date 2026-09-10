@@ -172,6 +172,15 @@ let completed = false;
 const $ = id => document.getElementById(id);
 const screens = ['start-screen','profile-screen','partner-profile-screen','question-screen','loading-screen','result-screen'];
 
+function setLines(id, lines) {
+  const node = $(id);
+  node.replaceChildren();
+  lines.filter(Boolean).forEach((line,index) => {
+    if (index) node.appendChild(document.createElement('br'));
+    node.appendChild(document.createTextNode(line));
+  });
+}
+
 function showScreen(id) {
   screens.forEach(screenId => $(screenId).classList.toggle('active', screenId === id));
   window.scrollTo(0,0);
@@ -310,10 +319,21 @@ function partnerMessage() {
   return ['あなたとの関係を完全に終わらせたい状態とは限りません','今は無理に距離を縮めず、彼の気持ちを尊重しながら、関係を悪化させないことが次の可能性につながります。'];
 }
 
+function currentRelationshipAnswer() {
+  return diagnosis.stage === 'reply' ? optionText('reply_state') || optionText('current_distance') || optionText('last_contact') : diagnosis.stage === 'remeet' ? optionText('meeting_state') : optionText('interaction_state');
+}
+
+const stageExplanations = {
+  reply:'「返信のブロック」とは、彼が返信しても大丈夫だと思える安心感がまだ足りず、やり取りが止まっている理由のことです。',
+  remeet:'「再会のブロック」とは、連絡はできても、彼がまた会いたいと思える安心感がまだ足りず、再会の手前で関係が止まっている理由のことです。',
+  reunion:'「復縁のブロック」とは、会うことはできても、彼の中に「また同じ関係になるかもしれない」という不安が残り、復縁の手前で止まっている理由のことです。',
+  accelerator:'今は大きなブロックを外すよりも、彼の中にある「また一緒にいたい」という気持ちを育てるフェーズです。'
+};
+
 function stageReason() {
   const breakup = optionText('breakup_style');
-  const current = diagnosis.stage === 'reply' ? optionText('reply_state') || optionText('current_distance') || optionText('last_contact') : diagnosis.stage === 'remeet' ? optionText('meeting_state') : optionText('interaction_state');
-  return `「${breakup}」という別れ方と、現在の「${current}」という回答を合わせると、今は${stageData[diagnosis.stage].label}を整える段階だと考えられます。`;
+  const current = currentRelationshipAnswer();
+  return [`「${breakup}」という別れ方と、`,`現在の「${current}」という回答を見ると、`,stageExplanations[diagnosis.stage]];
 }
 
 const actionContent = {
@@ -332,22 +352,28 @@ function renderResult() {
   const thought = optionText('thought');
   const actions = selectedByKey('anxious_actions').slice(0,2).map(opt => opt.text).join('・');
   const reaction = optionText('partner_reaction');
-  $('loop-title').textContent = `「${thought.replace(/[「」]/g,'')}」と感じた時に、行動が起きやすかったようです`;
+  setLines('loop-title',[`「${thought.replace(/[「」]/g,'')}」と感じた時、`,'このような行動が起きやすかったようです']);
   $('reaction-loop').innerHTML = [trigger,thought,actions,reaction,'さらに不安が大きくなる'].map((text,index) => `<div class="loop-step">${text}</div>${index < 4 ? '<span>↓</span>' : ''}`).join('');
-  $('loop-copy').textContent = `${profile.name}さんは、不安を彼の反応で落ち着かせようとした結果、気持ちを確認したり、自分を後回しにしたりする流れが起きやすかった可能性があります。これは性格が悪いからではなく、不安から自分を守ろうとした反応です。`;
+  setLines('loop-copy',[`${profile.name}さんは、その結果、`,'彼の気持ちを確認したり、','自分を後回しにしたりする流れが','起きやすかった可能性があります。','これは性格の問題ではなく、','不安から自分を守ろうとした反応です。']);
   const topTags = diagnosis.tags.slice(0,3);
-  $('heart-title').textContent = diagnosis.belief === 'まだ明確ではない' ? '今は、彼の反応によってハートが揺れやすくなっています' : `「${diagnosis.belief}」という不安が表れている可能性があります`;
+  setLines('heart-title',diagnosis.belief === 'まだ明確ではない' ? ['今は、彼の反応によって','ハートが揺れやすくなっています'] : [`「${diagnosis.belief}」という不安が、`,'表れている可能性があります']);
   $('heart-tags').innerHTML = topTags.map(tag => `<span>${tagLabels[tag]}</span>`).join('');
-  $('heart-copy').textContent = `${profile.name}さんの回答内容を見ると、彼へ愛情を求めすぎたり、嫌われないように自分を抑えたりする傾向が起きやすいようです。この満たされていない部分が「ハートの欠け」として恋愛中に反応している可能性があります。`;
+  setLines('heart-copy',[`${profile.name}さんの回答内容を見ると、`,'彼へ愛情を求めすぎたり、','嫌われないように自分を抑えたりする傾向が','起きやすいようです。','この満たされていない部分が、','「ハートの欠け」として','恋愛中に反応している可能性があります。']);
   const hasPast = diagnosis.past.length > 0;
   const pastText = hasPast ? diagnosis.past.slice(0,2).join('・') : 'まだ言葉になっていない過去の体験';
   $('past-chain').innerHTML = `<div>${pastText}</div><span>↓</span><div>「${diagnosis.belief}」という考え方</div><span>↓</span><div>${trigger}にハートが反応</div><span>↓</span><div>${actions}</div>`;
-  $('past-copy').textContent = hasPast ? `${pastText}を経験したことで、「${diagnosis.belief}」という考え方が作られた可能性があります。だから、${trigger}に「嫌われるかもしれない」「離れていくかもしれない」という不安が反応し、${actions}という行動につながりやすくなっていたと考えられます。` : `今回の回答だけでは、過去のどの体験とつながっているかまでは断定できません。ただ、${trigger}に不安が反応し、${actions}という行動につながりやすくなっていたことが見えてきます。`;
-  $('pattern-impact').textContent = 'この恋愛傾向は、今の彼との復縁だけでなく、今後の恋愛にも影響します。彼との関係だけを変えるのではなく、不安が起きる仕組みから整えることが大切です。';
-  $('partner-title').textContent = partner[0];
-  $('partner-copy').textContent = partner[1];
-  $('stage-title').textContent = stage.title;
-  $('stage-reason').textContent = stageReason();
+  setLines('past-copy',hasPast ? [`${pastText}を経験したことで、`,`「${diagnosis.belief}」という考え方が`,`作られた可能性があります。`,`だから、${trigger}に、`,`「嫌われるかもしれない」`,`「離れていくかもしれない」という不安が反応し、`,`${actions}という行動へ`,`つながりやすくなっていたと考えられます。`] : ['今回の回答だけでは、','過去のどの体験とつながっているかまでは','断定できません。',`ただ、${trigger}に不安が反応し、`,`${actions}という行動へ`,'つながりやすくなっていたことが見えてきます。']);
+  setLines('pattern-impact',['この恋愛傾向は、','今の彼との復縁だけでなく、','今後の恋愛にも影響します。','彼との関係だけを変えるのではなく、','不安が起きる仕組みから','整えることが大切です。']);
+  const partnerTitle = partner[0].split('、');
+  setLines('partner-title',partnerTitle.length > 1 ? [`${partnerTitle.shift()}、`,partnerTitle.join('、')] : partnerTitle);
+  const breakupReason = optionText('breakup_reason');
+  const breakupWords = optionText('breakup_words');
+  const partnerContext = [`「${breakupReason}」という別れの理由や、`];
+  if (breakupWords && breakupWords !== '特に言われていない') partnerContext.push(`別れ際に${breakupWords}と言われたこと、`);
+  partnerContext.push(`現在の「${currentRelationshipAnswer()}」という状況を見ると、`,...partner[1].split('。').filter(Boolean).map(sentence => `${sentence}。`));
+  setLines('partner-copy',partnerContext);
+  setLines('stage-title',diagnosis.stage === 'accelerator' ? ['今は「復縁のアクセル」を','踏むフェーズです'] : [`今は「${stage.label}」を`,'越えるフェーズです']);
+  setLines('stage-reason',stageReason());
   document.querySelectorAll('.stage-road div').forEach(node => node.classList.toggle('current', node.dataset.stage === diagnosis.stage));
   $('do-list').innerHTML = actionContent[diagnosis.stage].do.map(item => `<li>${item}</li>`).join('');
   $('dont-list').innerHTML = actionContent[diagnosis.stage].dont.map(item => `<li>${item}</li>`).join('');

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <main id="app" class="container">
@@ -128,11 +128,11 @@
         <div id="past-chain" class="past-chain"></div>
         <p id="past-copy"></p>
         <p id="pattern-impact" class="pattern-impact"></p>
-        <p class="caution">過去の出来事を原因として断定するものではありません。あなた自身が選んだ回答から、考えられるつながりを整理しています。</p>
+        <p class="caution">過去の出来事を原因として断定するものではありません。<br>あなた自身が選んだ回答から、<br>考えられるつながりを整理しています。</p>
       </article>
 
       <article class="karute-panel">
-        <div class="panel-label"><b>4</b>回答から考えられる今の彼の気持ち</div>
+        <div class="panel-label"><b>4</b>今の彼の気持ち</div>
         <h3 id="partner-title"></h3>
         <p id="partner-copy"></p>
       </article>
@@ -150,26 +150,22 @@
         <div class="panel-label"><b>6</b>今やること・やらないこと</div>
         <div class="action-box do"><h3>今やること</h3><ul id="do-list"></ul></div>
         <div class="action-box dont"><h3>今はやらないこと</h3><ul id="dont-list"></ul></div>
-        <p class="judge-note">彼の一つの反応だけで、次の段階へ進んでいいとは限りません。ここは自分に都合よく判断せず、彼の言葉や反応を合わせて見ていく必要があります。</p>
-      </article>
-
-      <article class="karute-panel limit-panel">
-        <div class="panel-label"><b>7</b>カルテで分かるのは現在地まで</div>
-        <p>実際にいつ動くか、何を伝えるか、彼の反応をどう判断するかは、別れた理由・彼の性格・現在のLINEによって変わります。</p>
+        <p class="judge-note">彼の一つの反応だけで、<br>次の段階へ進んでいいとは限りません。<br>自分に都合よく判断せず、<br>彼の言葉や反応を合わせて見る必要があります。</p>
       </article>
 
       <article id="offer-panel" class="karute-panel offer-panel">
-        <h3>ここからの復縁作戦を、<br>僕と一緒に考えましょう</h3>
+        <h3>ここからの復縁作戦を、<br>僕と一緒に考えましょう！</h3>
         <p>冷却期間を取る<br>連絡せずに待つ<br>自分磨きをする</p>
-        <p>こうした、よくある復縁方法が、あなたと彼に合っているとは限りません。</p>
+        <p>こうした、よくある復縁方法が、<br>あなたと彼に合っているとは限りません。</p>
         <p>今回の復縁カルテをもとに、</p>
         <div class="consult-points"><p>✓ 今、何から変えるべきか</p><p>✓ どんな順番で復縁を目指すべきか</p><p>✓ 次にどんな行動をするべきか</p></div>
         <p>を、僕が一緒に整理して直接お伝えします。</p>
         <h4>ただ、誰にでも受けてほしいとは思っていません</h4>
-        <p>話だけ聞いて終わりたい方ではなく、自分自身とも向き合い、必要なことに取り組みたい方のための相談です。</p>
-        <p class="sales-note">僕から無理にサポートを押しつけたり、強引に勧誘することはありません。まずは、あなたと彼の復縁作戦を一緒に考えるための相談です。</p>
-        <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>自分自身とも向き合い、本気で復縁に向けて取り組みたいです</span></label>
-        <label class="commit-check"><input id="support-checkbox" type="checkbox"><span>必要であれば、自分に合ったサポートの提案を受けても大丈夫です<br><small>（押し売りや強引な勧誘はありません）</small></span></label>
+        <p>話だけ聞いて終わりたい方ではなく、<br>自分自身とも向き合い、<br>必要なことに取り組みたい方のための相談です。</p>
+        <p class="sales-note">僕から無理にサポートを押しつけたり、<br>強引に勧誘することはありません。<br>まずは、あなたと彼の復縁作戦を<br>一緒に考えるための相談です。</p>
+        <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>自分自身とも向き合い、<br>本気で復縁に向けて取り組みたいです</span></label>
+        <label class="commit-check compact-check"><input id="support-checkbox" type="checkbox"><span>必要であれば、自分に合ったサポートの提案も受けます</span></label>
+        <p class="no-pressure-note">※押し売りや強引な勧誘はありません</p>
         <button id="consult-btn" class="primary-btn" disabled>ジローと復縁作戦を立てる</button>
         <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
       </article>
@@ -181,6 +177,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=9"></script>
+  <script src="main.js?v=10"></script>
 </body>
 </html>
