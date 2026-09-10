@@ -181,6 +181,17 @@ function setLines(id, lines) {
   });
 }
 
+function setParagraphs(id, paragraphs) {
+  const node = $(id);
+  node.replaceChildren();
+  paragraphs.filter(Boolean).forEach(text => {
+    const paragraph = document.createElement('span');
+    paragraph.className = 'copy-paragraph';
+    paragraph.textContent = text;
+    node.appendChild(paragraph);
+  });
+}
+
 function showScreen(id) {
   screens.forEach(screenId => $(screenId).classList.toggle('active', screenId === id));
   window.scrollTo(0,0);
@@ -305,6 +316,48 @@ function buildDiagnosis() {
   return { heartScore, heartLevel, tags, flags:[...flags], past, belief, stage, exclusions, canConsult:exclusions.length === 0 };
 }
 
+const tendencyInsights = {
+  abandonment:'彼との距離が少し変わっただけでも、その先の別れまで想像し、早く安心を確かめたくなる反応です。',
+  love_check:'愛情がなくなった事実を確認したいのではなく、今も大切にされているという安心を何度も確かめたくなる反応です。',
+  over_adapt:'自分の気持ちよりも彼が離れないことを優先し、無意識に「彼にとって都合のいい自分」でいようとする反応です。',
+  self_suppress:'本音を伝えて関係が壊れることを避けるために、言いたいことを飲み込み続ける反応です。',
+  worth:'ありのままでは足りないと感じ、愛されるために頑張り続けようとする反応です。',
+  betrayal:'信じたあとに傷つくことを避けるために、彼の言葉よりも変化や違和感を探そうとする反応です。',
+  comparison:'彼の時間や関心が自分以外へ向くと、自分の価値が下がったように感じやすい反応です。',
+  self_blame:'関係の変化を自分の責任として受け取り、正解を探すように自分の言動を振り返り続ける反応です。',
+  emotional:'分かってほしい気持ちを長く我慢した結果、一度に強い言葉や感情として出やすくなる反応です。',
+  monitoring:'分からない時間に耐えるため、返信・SNS・行動を確認することで安心を探そうとする反応です。',
+  partner_centered:'彼の反応を基準に安心や自信が変わり、自分の生活より彼の状態を優先しやすくなる反応です。'
+};
+
+const heartNeeds = {
+  abandonment:'離れていかないと感じられる安心', love_check:'言葉で確認しなくても愛されていると感じられる安心',
+  over_adapt:'相手に合わせなくても関係は壊れないという安心', self_suppress:'本音を伝えても受け止めてもらえる安心',
+  worth:'頑張らない自分にも価値があると思える安心', betrayal:'相手を信じても自分を守れるという安心',
+  comparison:'誰かと比べなくても自分は大切にされるという安心', self_blame:'すべてを自分の責任にしなくていいという安心',
+  emotional:'気持ちを少しずつ言葉にしても大丈夫という安心', monitoring:'分からない時間があっても関係は壊れないという安心',
+  partner_centered:'彼の反応がなくても自分の毎日を保てる安心'
+};
+
+const pastInsights = {
+  '親の顔色や期待を気にして育った経験':'親の顔色や期待を気にして育った方には、「今の自分のままでは認めてもらえない」「相手に合わせないと関係が悪くなる」という考え方が残ることがあります。',
+  '学生時代の仲間外れやいじめの経験':'仲間外れやいじめを経験した方には、少し反応が変わるだけで「また自分だけが外されるかもしれない」と先回りして身を守る反応が見られることがあります。',
+  '過去の恋人から浮気や裏切りを受けた経験':'信じた相手から裏切られた方には、同じ痛みを避けるために、相手の返信や行動の小さな変化を強く確認する反応が見られることがあります。',
+  '両親の離婚や片親の家庭で育った経験':'身近な関係が変化した経験を持つ方には、「大切な関係も突然終わるかもしれない」という不安が恋愛の中で表れやすいことがあります。',
+  '親から十分な愛情を感じられなかった経験':'親から十分な愛情を感じられなかった方には、「そのままの自分では愛されない」「もっと求めないと気持ちは伝わらない」という考え方が残ることがあります。',
+  '頑張った時だけ認めてもらえると感じた経験':'頑張った時に認められてきた方には、恋愛でも「役に立つ自分」「彼に合わせられる自分」でいないと愛されないと感じる傾向が見られることがあります。',
+  '自分の気持ちを否定された経験':'気持ちを伝えた時に否定された方には、本音を言う前に相手の反応を考え、我慢したあとで不安が大きくなる傾向が見られることがあります。',
+  '家族の機嫌を気にして過ごした経験':'家族の機嫌を気にして過ごした方には、相手の表情や返信の温度から気持ちを読み取り、自分より相手を優先する傾向が見られることがあります。'
+};
+
+function reactionInsight(reaction) {
+  if (reaction.includes('優しく安心')) return '彼が優しく安心させてくれると一度は落ち着けても、安心を彼の言葉だけに任せる状態では、次に反応が変わった時に前より強い不安が起きやすくなります。';
+  if (reaction.includes('次第に減った')) return '最初は安心させてくれた彼の反応が減ったことで、「もっと伝えれば分かってもらえるかも」と確認が増え、彼はさらに距離を取りたくなる流れが生まれていた可能性があります。';
+  if (reaction.includes('距離') || reaction.includes('重い') || reaction.includes('疲れる')) return '安心したくて起こした行動が彼には負担として伝わり、彼が距離を取るほど、さらに不安が強くなる循環ができていた可能性があります。';
+  if (reaction.includes('喧嘩') || reaction.includes('感情的')) return 'お互いに「分かってほしい」という気持ちが強くなるほど、安心を作る会話ではなく、どちらが正しいかを確かめるやり取りになっていた可能性があります。';
+  return '彼の反応がはっきり分からない状態でも、不安を一人で抱える時間が長くなり、頭の中で悪い結末を大きくしていた可能性があります。';
+}
+
 function partnerMessage() {
   const flags = new Set(diagnosis.flags);
   const reaction = selectedByKey('partner_reaction')[0] || {};
@@ -312,9 +365,9 @@ function partnerMessage() {
   if (flags.has('contact_refused') || flags.has('blocked')) return ['今は、自分の気持ちと距離を尊重してほしいと思っていそうです','完全に嫌いだと決めつける必要はありません。ただ、今は彼が求めている距離を守ることで、これ以上警戒を強めないことが大切です。'];
   if (flags.has('work_busy')) return ['あなたを嫌いというより、今は恋愛に向き合う余裕がなくなっていそうです','仕事が忙しいという言葉の裏には、関係を完全に切りたい気持ちではなく、恋愛に使える心や時間が足りない状態が考えられます。負担の少ない関わり方から、安心感を作り直せる可能性があります。'];
   if (flags.has('relationship_tired')) return ['あなたを嫌いというより、以前と同じ関わり方になることに疲れや不安を感じていそうです','関係そのものを否定しているというより、同じすれ違いを繰り返すことを避けたい気持ちが強い可能性があります。以前とは違う安心感を体験してもらうことが必要です。'];
-  if (flags.has('same_again')) return ['「また同じ関係になるかもしれない」と不安を感じていそうです','あなたへの気持ちだけではなく、以前と同じ不安ややり取りが繰り返されることを心配している可能性があります。'];
+  if (flags.has('same_again')) return ['彼はあなたを嫌いなのではなく、「復縁しても、また苦しくなるかも」と心配していそうです','彼が避けたいのはあなた自身というより、以前と同じ不安や確認のやり取りが繰り返されることかもしれません。気持ちがないから戻らないのではなく、戻って大丈夫だと思える材料がまだ足りない状態だと考えられます。'];
   if (flags.has('friends_only')) return ['関係を切りたいわけではないものの、恋愛に戻ることには迷いがありそうです','まずは安心して関われる相手として、以前とは違う関係を体験してもらうことが大切です。'];
-  if ((reaction.partner || 0) >= 2) return ['あなたを嫌いというより、どう向き合えばいいか迷っていそうです','気持ちを確認された時に、安心させ続けなければならない負担や、少し距離を置きたい気持ちが生まれていた可能性があります。'];
+  if ((reaction.partner || 0) >= 2) return ['彼はあなたを嫌いというより、「どう接すれば不安にさせずに済むのか」が分からなくなっていそうです','気持ちを確認されるたびに、安心させ続けなければならない負担を感じていた可能性があります。今は好き嫌いの答えよりも、以前とは違う落ち着いた関係を作れるかを見ている段階かもしれません。'];
   if (contact.contact < 3) return ['あなたとのつながりを、完全に手放した状態ではなさそうです','連絡手段や接点が残っていることは、少なくとも今すぐ関係を完全に切ろうとしていないサインの一つです。焦って答えを求めず、安心して関われる時間を重ねることで、気持ちが動く余地はあります。'];
   return ['あなたとの関係を完全に終わらせたい状態とは限りません','今は無理に距離を縮めず、彼の気持ちを尊重しながら、関係を悪化させないことが次の可能性につながります。'];
 }
@@ -352,27 +405,60 @@ function renderResult() {
   const thought = optionText('thought');
   const actions = selectedByKey('anxious_actions').slice(0,2).map(opt => opt.text).join('・');
   const reaction = optionText('partner_reaction');
+  const dominantTag = diagnosis.tags[0] || 'abandonment';
+  const coreNeed = heartNeeds[dominantTag] || heartNeeds.abandonment;
+  const tendencyInsight = tendencyInsights[dominantTag] || tendencyInsights.abandonment;
   setLines('loop-title',[`「${thought.replace(/[「」]/g,'')}」と感じた時、`,'このような行動が起きやすかったようです']);
   $('reaction-loop').innerHTML = [trigger,thought,actions,reaction,'さらに不安が大きくなる'].map((text,index) => `<div class="loop-step">${text}</div>${index < 4 ? '<span>↓</span>' : ''}`).join('');
-  setLines('loop-copy',[`${profile.name}さんは、その結果、`,'彼の気持ちを確認したり、','自分を後回しにしたりする流れが','起きやすかった可能性があります。','これは性格の問題ではなく、','不安から自分を守ろうとした反応です。']);
+  setParagraphs('loop-copy',[
+    `${profile.name}さんは、${trigger}に${thought}と考え、「${actions}」という行動で安心を取り戻そうとしていたようです。`,
+    `この時に本当に欲しかったのは、彼からの答えそのものではなく、「${coreNeed}」だった可能性があります。`,
+    reactionInsight(reaction),
+    `${tendencyInsight}これは性格の問題ではなく、不安から自分を守るために身についた反応です。ここが、復縁に向けて最初に整えたいポイントです。`
+  ]);
   const topTags = diagnosis.tags.slice(0,3);
   setLines('heart-title',diagnosis.belief === 'まだ明確ではない' ? ['今は、彼の反応によって','ハートが揺れやすくなっています'] : [`「${diagnosis.belief}」という不安が、`,'表れている可能性があります']);
   $('heart-tags').innerHTML = topTags.map(tag => `<span>${tagLabels[tag]}</span>`).join('');
-  setLines('heart-copy',[`${profile.name}さんの回答内容を見ると、`,'彼へ愛情を求めすぎたり、','嫌われないように自分を抑えたりする傾向が','起きやすいようです。','この満たされていない部分が、','「ハートの欠け」として','恋愛中に反応している可能性があります。']);
+  setParagraphs('heart-copy',[
+    `${profile.name}さんの回答内容を見ると、彼へ愛情を求めすぎたり、嫌われないように自分を抑えたりする傾向が起きやすいようです。`,
+    `満たしたかったのは、彼の愛情そのものというより、「${coreNeed}」です。この安心を自分の中で感じにくい部分を、ここでは「ハートの欠け」と呼んでいます。`,
+    `この欠けが反応すると、${trigger}だけで心が危険を感じ、実際には別れが決まっていなくても、${thought}と考えやすくなります。`,
+    `その結果、「${actions}」という行動で欠けを埋めようとしていた可能性があります。彼を好きだからだけではなく、安心を失う怖さが行動を強くしていたと考えられます。`
+  ]);
   const hasPast = diagnosis.past.length > 0;
-  const pastText = hasPast ? diagnosis.past.slice(0,2).join('・') : 'まだ言葉になっていない過去の体験';
-  $('past-chain').innerHTML = `<div>${pastText}</div><span>↓</span><div>「${diagnosis.belief}」という考え方</div><span>↓</span><div>${trigger}にハートが反応</div><span>↓</span><div>${actions}</div>`;
-  setLines('past-copy',hasPast ? [`${pastText}を経験したことで、`,`「${diagnosis.belief}」という考え方が`,`作られた可能性があります。`,`だから、${trigger}に、`,`「嫌われるかもしれない」`,`「離れていくかもしれない」という不安が反応し、`,`${actions}という行動へ`,`つながりやすくなっていたと考えられます。`] : ['今回の回答だけでは、','過去のどの体験とつながっているかまでは','断定できません。',`ただ、${trigger}に不安が反応し、`,`${actions}という行動へ`,'つながりやすくなっていたことが見えてきます。']);
-  setLines('pattern-impact',['この恋愛傾向は、','今の彼との復縁だけでなく、','今後の恋愛にも影響します。','彼との関係だけを変えるのではなく、','不安が起きる仕組みから','整えることが大切です。']);
+  const selectedPast = diagnosis.past.slice(0,2);
+  const pastText = hasPast ? selectedPast.join('・') : 'まだ言葉になっていない過去の体験';
+  const pastFirstStep = hasPast ? selectedPast.join('<br>') : pastText;
+  $('past-chain').innerHTML = `<div>${pastFirstStep}</div><span>↓</span><div>「${diagnosis.belief}」という考え方</div><span>↓</span><div>${trigger}にハートが反応</div><span>↓</span><div>${actions}</div>`;
+  setLines('past-title',diagnosis.belief === 'まだ明確ではない' ? ['今の不安につながる背景を、回答から整理しました'] : [`「${diagnosis.belief}」と感じやすい背景が、回答から見えてきました`]);
+  const commonPastPattern = selectedPast.map(item => pastInsights[item]).filter(Boolean).join(' ');
+  setParagraphs('past-copy',hasPast ? [
+    `${profile.name}さんが選んだ「${pastText}」には、今の恋愛で起きている不安と重なる部分があります。`,
+    commonPastPattern,
+    `${profile.name}さんの場合は、その経験から「${diagnosis.belief}」という考え方が残り、${trigger}にハートの欠けが反応した可能性があります。`,
+    `その瞬間、目の前の返信や出来事だけでなく、過去に感じた寂しさや怖さまで一緒に動くため、「${actions}」という行動が必要以上に強くなっていたと考えられます。`
+  ] : [
+    '今回の回答だけでは、過去のどの体験とつながっているかまでは断定できません。',
+    `ただ、${trigger}に${thought}と感じ、「${actions}」という行動で安心を取り戻そうとする流れは見えてきました。`,
+    'はっきりした出来事を思い出せなくても、安心を彼の反応だけに任せない状態を作ることが、同じ不安を繰り返さないために大切です。'
+  ]);
+  setParagraphs('pattern-impact',[
+    'この恋愛傾向は、今の彼との復縁だけでなく、今後の恋愛にも影響します。',
+    '彼との関係だけを変えるのではなく、不安が起きる仕組みから整えることで、復縁したあとも同じ問題を繰り返しにくくなります。'
+  ]);
   const partnerTitle = partner[0].split('、');
   setLines('partner-title',partnerTitle.length > 1 ? [`${partnerTitle.shift()}、`,partnerTitle.join('、')] : partnerTitle);
   const breakupReason = optionText('breakup_reason');
   const breakupWords = optionText('breakup_words');
-  const partnerContext = [`「${breakupReason}」という別れの理由や、`];
-  if (breakupWords && breakupWords !== '特に言われていない') partnerContext.push(`別れ際に${breakupWords}と言われたこと、`);
-  partnerContext.push(`現在の「${currentRelationshipAnswer()}」という状況を見ると、`,...partner[1].split('。').filter(Boolean).map(sentence => `${sentence}。`));
-  setLines('partner-copy',partnerContext);
-  setLines('stage-title',diagnosis.stage === 'accelerator' ? ['今は「復縁のアクセル」を','踏むフェーズです'] : [`今は「${stage.label}」を`,'越えるフェーズです']);
+  const partnerEvidence = [`別れの理由として「${breakupReason}」を選び`];
+  if (breakupWords && breakupWords !== '特に言われていない') partnerEvidence.push(`別れ際には${breakupWords}と言われ`);
+  partnerEvidence.push(`今は「${currentRelationshipAnswer()}」という状況です。`);
+  setParagraphs('partner-copy',[
+    partnerEvidence.join('、'),
+    partner[1],
+    diagnosis.stage === 'accelerator' ? '今の彼は、あなたとの時間に心地よさを感じる余地がありそうです。ただし、一つの良い反応だけで復縁を急ぐより、「前とは違う関係を作れそう」と感じてもらうことが、気持ちを復縁へ動かす鍵になります。' : '彼の中で迷いが残っているのは、気持ちが完全になくなったからとは限りません。「戻っても同じことを繰り返さない」と思える安心が増えることで、関係の見え方が変わる余地があります。'
+  ]);
+  setLines('stage-title',[diagnosis.stage === 'accelerator' ? '今は「復縁のアクセル」を踏むフェーズです' : `今は「${stage.label}」を越えるフェーズです`]);
   setLines('stage-reason',stageReason());
   document.querySelectorAll('.stage-road div').forEach(node => node.classList.toggle('current', node.dataset.stage === diagnosis.stage));
   $('do-list').innerHTML = actionContent[diagnosis.stage].do.map(item => `<li>${item}</li>`).join('');
