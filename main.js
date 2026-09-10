@@ -181,13 +181,28 @@ function setLines(id, lines) {
   });
 }
 
+const paragraphLabels = {
+  'loop-copy':['回答から見えたこと','本当に求めていた安心','二人の間で起きていたこと','復縁に向けて整える部分'],
+  'heart-copy':['回答に表れている傾向','ハートの欠けとは','不安が動く瞬間','行動が強くなった理由'],
+  'past-copy':['回答から見える背景','同じ経験をした方に多い傾向','今回の回答とのつながり','恋愛で起きていたこと'],
+  'pattern-impact':['今の彼との復縁への影響','ここから整える意味'],
+  'partner-copy':['回答から確認できること','彼が今、迷っていること','気持ちを動かすポイント']
+};
+
 function setParagraphs(id, paragraphs) {
   const node = $(id);
   node.replaceChildren();
   paragraphs.filter(Boolean).forEach(text => {
     const paragraph = document.createElement('span');
     paragraph.className = 'copy-paragraph';
-    paragraph.textContent = text;
+    const label = paragraphLabels[id]?.[node.childElementCount];
+    if (label) {
+      const heading = document.createElement('strong');
+      heading.className = 'copy-label';
+      heading.textContent = label;
+      paragraph.appendChild(heading);
+    }
+    paragraph.appendChild(document.createTextNode(text));
     node.appendChild(paragraph);
   });
 }
