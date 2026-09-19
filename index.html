@@ -20,8 +20,9 @@
   <main id="app" class="container">
     <section id="start-screen" class="screen active start-screen">
       <div class="hero-image-container"><img src="images/hero-couple-photo.png" alt="笑顔で過ごすカップル" class="hero-photo"></div>
-      <h1>ジロー式 <span>復縁診断</span></h1>
-      <p class="lead">20個の質問から、<br>あなたが復縁するために必要なこと、<br>今の彼の気持ちをお伝えします。</p>
+      <p id="audience-badge" class="audience-badge" hidden>サポート購入者専用</p>
+      <h1 id="start-title">ジロー式 <span>復縁診断</span></h1>
+      <p id="start-lead" class="lead">20個の質問から、<br>あなたが復縁するために必要なこと、<br>今の彼の気持ちをお伝えします。</p>
       <p class="duration-note">回答時間の目安：約4〜5分</p>
       <p class="start-note">正解・不正解はありません。<br>今の自分に一番近いものを選んでください。</p>
       <button id="start-btn" class="primary-btn">無料で復縁診断を始める</button>
@@ -169,6 +170,14 @@
       <article id="no-offer-panel" class="karute-panel no-offer-panel" hidden>
         <h3>今は、まずあなた自身を守ることを優先してください</h3>
         <p>今回の回答では、すぐに個別相談へ進むよりも、焦らず自分の生活と気持ちを落ち着けることが大切だと考えられます。</p>
+      </article>
+
+      <article id="member-panel" class="karute-panel member-panel" hidden>
+        <p class="member-kicker">購入者専用</p>
+        <h3>このカルテを、<br>これからのサポートに活かしましょう</h3>
+        <p>回答内容をジローも確認し、今の状況に合わせて、次に取り組むことを一緒に整理します。</p>
+        <div class="consult-points"><p>✓ 今、何から整えるべきか</p><p>✓ 彼との関係をどう進めるか</p><p>✓ サポート内で何を優先するか</p></div>
+        <div class="line-instruction member-line-instruction"><p>公式LINEへ戻って</p><strong>購入者診断</strong><p>と送ってください</p><button id="copy-member-keyword-btn" type="button">「購入者診断」をコピーする</button><small>ジローが診断結果を確認して、<br>今後の進め方をご連絡します。</small></div>
       </article>
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>

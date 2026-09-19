@@ -1,5 +1,6 @@
 const option = (text, data = {}) => ({ text, ...data });
 const question = (key, text, options, data = {}) => ({ key, text, options, ...data });
+const audienceMode = new URLSearchParams(location.search).get('audience') === 'member' ? 'member' : 'prospect';
 
 const coreQuestions = [
   question('elapsed', '彼と別れてから、<br>どのくらい経ちますか？', ['1ヶ月未満','1〜3ヶ月','3〜6ヶ月','6ヶ月〜1年','1年以上','まだ正式には別れていない']),
@@ -478,10 +479,12 @@ function renderResult() {
   document.querySelectorAll('.stage-road div').forEach(node => node.classList.toggle('current', node.dataset.stage === diagnosis.stage));
   $('do-list').innerHTML = actionContent[diagnosis.stage].do.map(item => `<li>${item}</li>`).join('');
   $('dont-list').innerHTML = actionContent[diagnosis.stage].dont.map(item => `<li>${item}</li>`).join('');
-  $('offer-panel').hidden = !diagnosis.canConsult;
-  $('no-offer-panel').hidden = diagnosis.canConsult;
+  const isMember = audienceMode === 'member';
+  $('offer-panel').hidden = isMember || !diagnosis.canConsult;
+  $('no-offer-panel').hidden = isMember || diagnosis.canConsult;
+  $('member-panel').hidden = !isMember;
   showScreen('result-screen');
-  track('result_view',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage});
+  track('result_view',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage,audience:audienceMode});
   submitToGoogleForm();
 }
 
@@ -533,7 +536,7 @@ function submitToGoogleForm() {
     'entry.1200021442':groupedAnswers(9,11),
     'entry.1848582778':groupedAnswers(12,15),
     'entry.1178729743':groupedAnswers(16,19),
-    'entry.721169860':`heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${diagnosis.canConsult ? '作戦相談' : 'なし'}`
+    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? '購入者診断' : (diagnosis.canConsult ? '作戦相談' : 'なし')}`
   };
   Object.entries(data).forEach(([name,value]) => {
     const input = document.createElement('input');
@@ -545,7 +548,14 @@ function submitToGoogleForm() {
 }
 
 document.addEventListener('DOMContentLoaded',() => {
-  track('diagnosis_view');
+  if (audienceMode === 'member') {
+    document.body.classList.add('member-mode');
+    $('audience-badge').hidden = false;
+    $('start-title').innerHTML = 'ジロー式 <span>復縁診断</span>';
+    $('start-lead').innerHTML = '20個の質問から、<br>今の彼の気持ちと、<br>これからのサポート方針を整理します。';
+    $('start-btn').textContent = '購入者専用の復縁診断を始める';
+  }
+  track('diagnosis_view',{audience:audienceMode});
   $('start-btn').addEventListener('click',() => showScreen('profile-screen'));
   $('profile-next-btn').addEventListener('click',() => {
     const name = $('user-name-input').value.trim();
@@ -595,6 +605,12 @@ document.addEventListener('DOMContentLoaded',() => {
     try { await navigator.clipboard.writeText('作戦相談'); }
     catch (_) { window.prompt('この言葉をコピーしてください','作戦相談'); }
     $('copy-keyword-btn').textContent = 'コピーしました ✓';
+  });
+  $('copy-member-keyword-btn').addEventListener('click',async() => {
+    try { await navigator.clipboard.writeText('購入者診断'); }
+    catch (_) { window.prompt('この言葉をコピーしてください','購入者診断'); }
+    $('copy-member-keyword-btn').textContent = 'コピーしました ✓';
+    track('member_keyword_copy',{heart_level:diagnosis?.heartLevel,current_stage:diagnosis?.stage});
   });
   $('close-btn').addEventListener('click',() => window.close());
   window.addEventListener('pagehide',() => {
