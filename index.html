@@ -164,7 +164,16 @@
         <label class="commit-check"><input id="support-checkbox" type="checkbox"><span>必要であれば、自分に合ったサポートの提案も受けます</span></label>
         <p class="no-pressure-note">※サポートの無理な押し付けや、強引な勧誘は行いません。</p>
         <button id="consult-btn" class="primary-btn" disabled>ジローと復縁作戦を立てる</button>
-        <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
+        <div id="line-instruction" class="line-instruction" hidden>
+          <p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p>
+          <button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button>
+          <div class="manual-followup-note">
+            <p class="followup-kicker">キーワードを送ったあとは</p>
+            <p><span class="result-person-name">あなた</span>さんの回答内容と今の状況を、<br>僕がきちんと確認します。</p>
+            <p>最初に自動返信が届きますが、<br>それで終わりではありません。<br>確認後、改めて僕からLINEでご連絡します。</p>
+            <small>すぐに既読や返信がつかない場合も、<br>順番に確認していますので、<br>そのまま少しお待ちください。</small>
+          </div>
+        </div>
       </article>
 
       <article id="no-offer-panel" class="karute-panel no-offer-panel" hidden>
@@ -182,6 +191,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=12"></script>
+  <script src="main.js?v=13"></script>
 </body>
 </html>
