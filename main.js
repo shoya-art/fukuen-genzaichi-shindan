@@ -2,6 +2,7 @@ const option = (text, data = {}) => ({ text, ...data });
 const question = (key, text, options, data = {}) => ({ key, text, options, ...data });
 const audienceMode = new URLSearchParams(location.search).get('audience') === 'member' ? 'member' : 'prospect';
 const conceptMode = new URLSearchParams(location.search).get('concept') === 'selfesteem' ? 'selfesteem' : 'heart';
+const previewMode = new URLSearchParams(location.search).get('preview') === '1';
 
 const coreQuestions = [
   question('elapsed', '彼と別れてから、<br>どのくらい経ちますか？', ['1ヶ月未満','1〜3ヶ月','3〜6ヶ月','6ヶ月〜1年','1年以上','まだ正式には別れていない']),
@@ -177,9 +178,12 @@ const screens = ['start-screen','profile-screen','partner-profile-screen','quest
 function setLines(id, lines) {
   const node = $(id);
   node.replaceChildren();
-  lines.filter(Boolean).forEach((line,index) => {
+  const visibleLines = lines.filter(Boolean);
+  visibleLines.forEach((line,index) => {
     if (index) node.appendChild(document.createElement('br'));
-    node.appendChild(document.createTextNode(line));
+    const displayLine = conceptMode === 'selfesteem' && index < visibleLines.length - 1
+      ? line.replace(/[、，,]\s*$/, '') : line;
+    node.appendChild(document.createTextNode(displayLine));
   });
 }
 
@@ -402,10 +406,19 @@ const stageExplanations = {
   accelerator:'今は大きなブロックを外すよりも、彼の中にある「また一緒にいたい」という気持ちを育てるフェーズです。'
 };
 
+const selfesteemStageExplanations = {
+  reply:'今は彼と自然にやり取りできるところで止まっています。彼が返信を負担に感じない距離感を作ることが、次の一歩です。',
+  remeet:'連絡は取れていても、二人で会うところまでは進めていません。今は「再会」の手前で止まっています。',
+  reunion:'会うことはできても、もう一度付き合うところまでは進めていません。今は「復縁」の手前で止まっています。',
+  accelerator:'返信や再会はできている状態です。焦って答えを求めず、彼が「また付き合いたい」と思える関係を育てる段階です。'
+};
+
 function stageReason() {
   const breakup = optionText('breakup_style');
   const current = currentRelationshipAnswer();
-  return [`「${breakup}」という別れ方と、`,`現在の「${current}」という回答を見ると、`,stageExplanations[diagnosis.stage]];
+  return conceptMode === 'selfesteem'
+    ? [`別れ方は「${breakup}」`,`今の二人は「${current}」という状況です`,selfesteemStageExplanations[diagnosis.stage]]
+    : [`「${breakup}」という別れ方と、`,`現在の「${current}」という回答を見ると、`,stageExplanations[diagnosis.stage]];
 }
 
 const actionContent = {
@@ -493,7 +506,13 @@ function renderResult() {
     partner[1],
     diagnosis.stage === 'accelerator' ? '今の彼は、あなたとの時間に心地よさを感じる余地がありそうです。ただし、一つの良い反応だけで復縁を急ぐより、「前とは違う関係を作れそう」と感じてもらうことが、気持ちを復縁へ動かす鍵になります。' : '彼の中で迷いが残っているのは、気持ちが完全になくなったからとは限りません。「戻っても同じことを繰り返さない」と思える安心が増えることで、関係の見え方が変わる余地があります。'
   ]);
-  setLines('stage-title',[diagnosis.stage === 'accelerator' ? '今は「復縁のアクセル」を踏むフェーズです' : `今は「${stage.label}」を越えるフェーズです`]);
+  const selfesteemStageTitles = {
+    reply:'今は「返信」の手前で止まっています',
+    remeet:'今は「再会」の手前で止まっています',
+    reunion:'今は「復縁」の手前で止まっています',
+    accelerator:'今は復縁に向けて関係を深める段階です'
+  };
+  setLines('stage-title',[conceptMode === 'selfesteem' ? selfesteemStageTitles[diagnosis.stage] : (diagnosis.stage === 'accelerator' ? '今は「復縁のアクセル」を踏むフェーズです' : `今は「${stage.label}」を越えるフェーズです`)]);
   setLines('stage-reason',stageReason());
   document.querySelectorAll('.stage-road div').forEach(node => node.classList.toggle('current', node.dataset.stage === diagnosis.stage));
   $('do-list').innerHTML = actionContent[diagnosis.stage].do.map(item => `<li>${item}</li>`).join('');
@@ -504,7 +523,7 @@ function renderResult() {
   $('member-panel').hidden = !isMember;
   showScreen('result-screen');
   track('result_view',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage,audience:audienceMode});
-  submitToGoogleForm();
+  if (!previewMode) submitToGoogleForm();
 }
 
 function finishDiagnosis() {
@@ -571,9 +590,13 @@ document.addEventListener('DOMContentLoaded',() => {
     document.body.classList.add('selfesteem-mode');
     $('start-lead').innerHTML = '20個の質問から、<br>自己肯定感と別れのつながり、<br>今の彼の気持ちと次にやることを整理します。';
     $('analysis-self').innerHTML = '<b>✓</b>自己肯定感が揺れる場面を整理';
-    $('result-heading').innerHTML = '<span id="result-name" class="result-person-name">あなた</span>さんが復縁に向けて<br>整えたいことが見えてきました';
+    $('result-heading').innerHTML = '<span id="result-name" class="result-person-name">あなた</span>さんが復縁するために<br>やるべきことが見えてきました';
     $('self-panel-label').innerHTML = '<span class="result-person-name">あなた</span>さんの自己肯定感が揺れる場面';
-    $('past-panel-label').innerHTML = '<span class="result-person-name">あなた</span>さんの自信が揺れやすくなった背景';
+    $('past-panel-label').innerHTML = '<span class="result-person-name">あなた</span>さんの自信が下がりやすい背景';
+    document.querySelector('.stage-panel .panel-label').innerHTML = '<b>5</b>別れ方から見る復縁の現在地';
+    document.querySelector('.stage-road [data-stage="accelerator"]').textContent = '関係を深める';
+    document.querySelector('.judge-note').innerHTML = '彼の一つの反応だけで<br>次の段階へ進んでいいとは限りません。<br>自分に都合よく判断せず<br>彼の言葉や反応を合わせて見る必要があります。';
+    document.querySelector('#offer-panel > p').textContent = '今回の復縁カルテをもとに';
     $('self-map-title').hidden = false;
   }
   if (audienceMode === 'member') {
