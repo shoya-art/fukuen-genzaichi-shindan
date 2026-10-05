@@ -1,6 +1,7 @@
 const option = (text, data = {}) => ({ text, ...data });
 const question = (key, text, options, data = {}) => ({ key, text, options, ...data });
 const audienceMode = new URLSearchParams(location.search).get('audience') === 'member' ? 'member' : 'prospect';
+const conceptMode = new URLSearchParams(location.search).get('concept') === 'selfesteem' ? 'selfesteem' : 'heart';
 
 const coreQuestions = [
   question('elapsed', '彼と別れてから、<br>どのくらい経ちますか？', ['1ヶ月未満','1〜3ヶ月','3〜6ヶ月','6ヶ月〜1年','1年以上','まだ正式には別れていない']),
@@ -184,7 +185,9 @@ function setLines(id, lines) {
 
 const paragraphLabels = {
   'loop-copy':['回答から見えたこと','本当に求めていた安心','二人の間で起きていたこと','復縁に向けて整える部分'],
-  'heart-copy':['回答に表れている傾向','ハートの欠けとは','不安が動く瞬間','行動が強くなった理由'],
+  'heart-copy':conceptMode === 'selfesteem'
+    ? ['回答に表れている傾向','自己肯定感とのつながり','不安が強くなる瞬間','二人のすれ違いにつながった行動']
+    : ['回答に表れている傾向','ハートの欠けとは','不安が動く瞬間','行動が強くなった理由'],
   'past-copy':['回答から見える背景','同じ経験をした方に多い傾向','今回の回答とのつながり','恋愛で起きていたこと'],
   'pattern-impact':['今の彼との復縁への影響','ここから整える意味'],
   'partner-copy':['回答から確認できること','彼が今、迷っていること','気持ちを動かすポイント']
@@ -240,7 +243,7 @@ function renderQuestion() {
   const q = questions[currentIndex];
   $('progress-label').textContent = `${currentIndex + 1} / 20`;
   $('progress-bar').style.width = `${((currentIndex + 1) / 20) * 100}%`;
-  $('phase-label').textContent = currentIndex < 7 ? '別れ方と今の2人' : currentIndex < 14 ? 'あなたの恋愛反応' : currentIndex < 17 ? 'ハートの背景' : 'あなたに合わせた確認';
+  $('phase-label').textContent = currentIndex < 7 ? '別れ方と今の2人' : currentIndex < 14 ? 'あなたの恋愛反応' : currentIndex < 17 ? (conceptMode === 'selfesteem' ? '自己肯定感の背景' : 'ハートの背景') : 'あなたに合わせた確認';
   $('question-number').textContent = `Q${currentIndex + 1}`;
   $('question-text').innerHTML = q.text;
   $('question-note').textContent = q.note || '';
@@ -430,12 +433,23 @@ function renderResult() {
     `${profile.name}さんは、${trigger}に${thought}と考え、「${actions}」という行動で安心を取り戻そうとしていたようです。`,
     `この時に本当に欲しかったのは、彼からの答えそのものではなく、「${coreNeed}」だった可能性があります。`,
     reactionInsight(reaction),
-    `${tendencyInsight}これは性格の問題ではなく、不安から自分を守るために身についた反応です。ここが、復縁に向けて最初に整えたいポイントです。`
+    conceptMode === 'selfesteem'
+      ? `${tendencyInsight}自分への自信が彼の反応で揺れやすいと、安心を求める行動が増えることがあります。復縁に向けて、まず整えたい部分です。`
+      : `${tendencyInsight}これは性格の問題ではなく、不安から自分を守るために身についた反応です。ここが、復縁に向けて最初に整えたいポイントです。`
   ]);
   const topTags = diagnosis.tags.slice(0,3);
-  setLines('heart-title',diagnosis.belief === 'まだ明確ではない' ? ['今は、彼の反応によって','ハートが揺れやすくなっています'] : [`「${diagnosis.belief}」という不安が、`,'表れている可能性があります']);
+  setLines('heart-title',conceptMode === 'selfesteem'
+    ? (diagnosis.belief === 'まだ明確ではない'
+      ? ['彼の反応によって、自分への自信が','揺れやすくなっているようです']
+      : [`「${diagnosis.belief}」という考えが、`,'自分への自信を揺らしている可能性があります'])
+    : (diagnosis.belief === 'まだ明確ではない' ? ['今は、彼の反応によって','ハートが揺れやすくなっています'] : [`「${diagnosis.belief}」という不安が、`,'表れている可能性があります']));
   $('heart-tags').innerHTML = topTags.map(tag => `<span>${tagLabels[tag]}</span>`).join('');
-  setParagraphs('heart-copy',[
+  setParagraphs('heart-copy',conceptMode === 'selfesteem' ? [
+    `${profile.name}さんの回答では、彼の反応が変わると「${thought.replace(/[「」]/g,'')}」と考え、「${actions}」という行動を取りやすかったようです。`,
+    `本当に欲しかったのは「${coreNeed}」だったのかもしれません。自分の価値や安心感を彼の反応だけで確かめようとすると、自己肯定感が揺れやすくなります。`,
+    `${trigger}、実際には気持ちが離れたと決まっていなくても、自分に自信が持てず、悪い結末を想像しやすくなります。`,
+    `その不安から「${actions}」という行動が増え、彼とのすれ違いを重ねて別れにつながった可能性があります。自己肯定感を整えることは、復縁に向けて彼と落ち着いて向き合うための土台になります。`
+  ] : [
     `${profile.name}さんの回答内容を見ると、彼へ愛情を求めすぎたり、嫌われないように自分を抑えたりする傾向が起きやすいようです。`,
     `満たしたかったのは、彼の愛情そのものというより、「${coreNeed}」です。この安心を自分の中で感じにくい部分を、ここでは「ハートの欠け」と呼んでいます。`,
     `この欠けが反応すると、${trigger}だけで心が危険を感じ、実際には別れが決まっていなくても、${thought}と考えやすくなります。`,
@@ -445,20 +459,25 @@ function renderResult() {
   const selectedPast = diagnosis.past.slice(0,2);
   const pastText = hasPast ? selectedPast.join('・') : 'まだ言葉になっていない過去の体験';
   const pastFirstStep = hasPast ? selectedPast.join('<br>') : pastText;
-  $('past-chain').innerHTML = `<div>${pastFirstStep}</div><span>↓</span><div>「${diagnosis.belief}」という考え方</div><span>↓</span><div>${trigger}にハートが反応</div><span>↓</span><div>${actions}</div>`;
+  $('past-chain').innerHTML = `<div>${pastFirstStep}</div><span>↓</span><div>「${diagnosis.belief}」という考え方</div><span>↓</span><div>${trigger}${conceptMode === 'selfesteem' ? '<br>自分への自信が揺らぐ' : 'にハートが反応'}</div><span>↓</span><div>${actions}</div>`;
   setLines('past-title',diagnosis.belief === 'まだ明確ではない' ? ['今の不安につながる背景を、回答から整理しました'] : [`「${diagnosis.belief}」と感じやすい背景が、回答から見えてきました`]);
   const commonPastPattern = selectedPast.map(item => pastInsights[item]).filter(Boolean).join(' ');
   setParagraphs('past-copy',hasPast ? [
     `${profile.name}さんが選んだ「${pastText}」には、今の恋愛で起きている不安と重なる部分があります。`,
     commonPastPattern,
-    `${profile.name}さんの場合は、その経験から「${diagnosis.belief}」という考え方が残り、${trigger}にハートの欠けが反応した可能性があります。`,
+    conceptMode === 'selfesteem'
+      ? `${profile.name}さんの場合、その経験と「${diagnosis.belief}」という考え方が重なり、${trigger}に自分への自信が揺れた可能性があります。`
+      : `${profile.name}さんの場合は、その経験から「${diagnosis.belief}」という考え方が残り、${trigger}にハートの欠けが反応した可能性があります。`,
     `その瞬間、目の前の返信や出来事だけでなく、過去に感じた寂しさや怖さまで一緒に動くため、「${actions}」という行動が必要以上に強くなっていたと考えられます。`
   ] : [
     '今回の回答だけでは、過去のどの体験とつながっているかまでは断定できません。',
     `ただ、${trigger}に${thought}と感じ、「${actions}」という行動で安心を取り戻そうとする流れは見えてきました。`,
     'はっきりした出来事を思い出せなくても、安心を彼の反応だけに任せない状態を作ることが、同じ不安を繰り返さないために大切です。'
   ]);
-  setParagraphs('pattern-impact',[
+  setParagraphs('pattern-impact',conceptMode === 'selfesteem' ? [
+    '自己肯定感が揺れたときの反応は、今の彼との関係だけでなく、今後の恋愛にも影響することがあります。',
+    '自分への安心感を育てると、不安なまま追ったり我慢したりせず、彼との関係に合った行動を選びやすくなります。復縁の可能性を高めるためにも大切な土台です。'
+  ] : [
     'この恋愛傾向は、今の彼との復縁だけでなく、今後の恋愛にも影響します。',
     '彼との関係だけを変えるのではなく、不安が起きる仕組みから整えることで、復縁したあとも同じ問題を繰り返しにくくなります。'
   ]);
@@ -494,7 +513,7 @@ function finishDiagnosis() {
   track('diagnosis_complete',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage});
   showScreen('loading-screen');
   const items = [...document.querySelectorAll('.analysis-item')];
-  const statuses = ['別れ方を確認しています…','恋愛中の反応をつないでいます…','ハートの傷を整理しています…','今の彼の気持ちを考えています…','復縁ステージを確認しています…','カルテを仕上げています…'];
+  const statuses = ['別れ方を確認しています…','恋愛中の反応をつないでいます…',conceptMode === 'selfesteem' ? '自己肯定感が揺れる場面を整理しています…' : 'ハートの傷を整理しています…','今の彼の気持ちを考えています…','復縁ステージを確認しています…','カルテを仕上げています…'];
   items.forEach(item => item.classList.remove('done'));
   $('loading-bar').style.width = '0%';
   statuses.forEach((status,index) => window.setTimeout(() => {
@@ -536,7 +555,7 @@ function submitToGoogleForm() {
     'entry.1200021442':groupedAnswers(9,11),
     'entry.1848582778':groupedAnswers(12,15),
     'entry.1178729743':groupedAnswers(16,19),
-    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? '購入者診断' : (diagnosis.canConsult ? '作戦相談' : 'なし')}`
+    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜コンセプト:${conceptMode === 'selfesteem' ? '自己肯定感' : 'ハートの欠け'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? '購入者診断' : (diagnosis.canConsult ? '作戦相談' : 'なし')}`
   };
   Object.entries(data).forEach(([name,value]) => {
     const input = document.createElement('input');
@@ -548,6 +567,15 @@ function submitToGoogleForm() {
 }
 
 document.addEventListener('DOMContentLoaded',() => {
+  if (conceptMode === 'selfesteem') {
+    document.body.classList.add('selfesteem-mode');
+    $('start-lead').innerHTML = '20個の質問から、<br>自己肯定感と別れのつながり、<br>今の彼の気持ちと次にやることを整理します。';
+    $('analysis-self').innerHTML = '<b>✓</b>自己肯定感が揺れる場面を整理';
+    $('result-heading').innerHTML = '<span id="result-name" class="result-person-name">あなた</span>さんが復縁に向けて<br>整えたいことが見えてきました';
+    $('self-panel-label').innerHTML = '<span class="result-person-name">あなた</span>さんの自己肯定感が揺れる場面';
+    $('past-panel-label').innerHTML = '<span class="result-person-name">あなた</span>さんの自信が揺れやすくなった背景';
+    $('self-map-title').hidden = false;
+  }
   if (audienceMode === 'member') {
     document.body.classList.add('member-mode');
     $('audience-badge').hidden = false;

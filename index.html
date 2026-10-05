@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
   <main id="app" class="container">
@@ -90,7 +90,7 @@
       <div class="analysis-list">
         <div class="analysis-item"><b>✓</b>別れ方と現在の関係を確認</div>
         <div class="analysis-item"><b>✓</b>恋愛中に起きていた反応を分析</div>
-        <div class="analysis-item"><b>✓</b>ハートに残っている傷を整理</div>
+        <div id="analysis-self" class="analysis-item"><b>✓</b>ハートに残っている傷を整理</div>
         <div class="analysis-item"><b>✓</b>今の彼の気持ちを確認</div>
         <div class="analysis-item"><b>✓</b>復縁までの現在地を判定</div>
         <div class="analysis-item"><b>✓</b>今やること・避けたいことを作成</div>
@@ -102,7 +102,7 @@
     <section id="result-screen" class="screen result-screen">
       <header class="result-hero">
         <p>ジロー式・復縁カルテ</p>
-        <h2><span id="result-name" class="result-person-name">あなた</span>さんにぴったりの<br>復縁方法が見つかりました</h2>
+        <h2 id="result-heading"><span id="result-name" class="result-person-name">あなた</span>さんにぴったりの<br>復縁方法が見つかりました</h2>
         <img id="result-photo" src="images/result-a-couple.png" alt="診断結果を表すカップル">
       </header>
 
@@ -114,17 +114,18 @@
       </article>
 
       <article class="karute-panel heart-panel">
-        <div class="panel-label"><b>2</b><span><span class="result-person-name">あなた</span>さんのハートに残っている欠け</span></div>
+        <div class="panel-label"><b>2</b><span id="self-panel-label"><span class="result-person-name">あなた</span>さんのハートに残っている欠け</span></div>
         <h3 id="heart-title"></h3>
         <div class="heart-map">
           <img src="images/heart-karute-multiple.png" alt="回答から見えてきた複数のハートの欠け">
+          <p id="self-map-title" class="self-map-title" hidden>回答から見えた、不安のパターン</p>
           <div id="heart-tags" class="heart-tags"></div>
         </div>
         <p id="heart-copy"></p>
       </article>
 
       <article class="karute-panel">
-        <div class="panel-label"><b>3</b><span><span class="result-person-name">あなた</span>さんが不安になりやすい理由</span></div>
+        <div class="panel-label"><b>3</b><span id="past-panel-label"><span class="result-person-name">あなた</span>さんが不安になりやすい理由</span></div>
         <h3 id="past-title">過去の体験から、今の不安が<br>生まれている可能性があります</h3>
         <div id="past-chain" class="past-chain"></div>
         <p id="past-copy"></p>
@@ -182,6 +183,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=12"></script>
+  <script src="main.js?v=13"></script>
 </body>
 </html>
