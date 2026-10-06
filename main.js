@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded',() => {
     $('audience-badge').hidden = false;
     $('start-title').innerHTML = 'ジロー式 <span>復縁診断</span>';
     $('start-lead').innerHTML = '20個の質問から、<br>今の彼の気持ちと、<br>これからのサポート方針を整理します。';
-    $('start-btn').textContent = '購入者専用の復縁診断を始める';
+    $('start-btn').textContent = 'サポート受講生専用の診断を始める';
   }
   track('diagnosis_view',{audience:audienceMode});
   $('start-btn').addEventListener('click',() => showScreen('profile-screen'));
