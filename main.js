@@ -17,7 +17,7 @@ const coreQuestions = [
     option('「連絡しないでほしい」',{flag:'contact_refused'}), option('「嫌いになったわけではない」',{flag:'not_hate'}),
     option('特に言われていない',{exclusive:true})
   ], { multiple:true, note:'複数選択できます。当てはまるものをすべて選んでください' }),
-  question('relationship_status', '現在のお二人の状況を<br>教えてください。', [
+  question('relationship_status', '現在の2人の状況を<br>教えてください。', [
     option('お互い特定の交際相手はいない'), option('彼に気になる女性がいる可能性がある',{flag:'possible_other'}),
     option('彼に新しい恋人がいる',{flag:'new_partner'}), option('自分に現在の交際相手がいる',{flag:'user_partner'}),
     option('自分または彼のどちらかが既婚',{flag:'married'}), option('お互いに既婚',{flag:'married'}), option('分からない',{flag:'status_unknown'})
@@ -44,7 +44,7 @@ const coreQuestions = [
     option('彼のSNSや行動を確認した',{heart:2,tag:'monitoring'}), option('会いたいと何度も伝えた',{heart:2,tag:'abandonment'}),
     option('嫌われないように彼へ合わせた',{heart:2,tag:'over_adapt'}), option('言いたいことを我慢した',{heart:2,tag:'self_suppress'}),
     option('自分が悪いと思って何度も謝った',{heart:2,tag:'self_blame'}), option('悲しさや怒りを彼にぶつけた',{heart:3,tag:'emotional'}),
-    option('何も言わず、一人で抱え込んだ',{heart:2,tag:'self_suppress'}), option('自分の生活へ気持ちを戻せていた',{heart:0,exclusive:true})
+    option('何も言わず、1人で抱え込んだ',{heart:2,tag:'self_suppress'}), option('自分の生活へ気持ちを戻せていた',{heart:0,exclusive:true})
   ], { multiple:true, note:'複数選択できます。当てはまるものをすべて選んでください', heartCap:5 }),
   question('self_abandon', '彼との関係で、自分を後回しに<br>していたことはありますか？', [
     option('自分の予定より彼を優先していた',{heart:2,tag:'partner_centered'}), option('彼の機嫌を悪くしないことを優先していた',{heart:2,tag:'over_adapt'}),
@@ -92,8 +92,8 @@ const coreQuestions = [
     option('人を信じすぎると傷つく',{belief:'人を信じすぎると傷つく',heart:2,tag:'betrayal'}),
     option('特に思い当たらない',{belief:'まだ明確ではない',heart:0,exclusive:true}), option('分からない・答えたくない',{belief:'まだ明確ではない',heart:0,exclusive:true})
   ], { multiple:true, note:'複数選択できます。当てはまるものをすべて選んでください', heartCap:6 }),
-  question('desired_relation', '彼と復縁した後、<br>どんな二人でいたいですか？', [
-    option('お互いに本音を伝えられる二人'),option('前と同じ問題を繰り返さない二人'),option('お互いの生活も大切にできる二人'),option('不安になっても話し合える二人'),option('安心して一緒にいられる二人'),option('結婚や将来まで考えられる二人'),option('とにかく、もう一度付き合いたい',{exclusive:true}),option('まだそこまでは考えられない',{exclusive:true})
+  question('desired_relation', '彼と復縁した後、<br>どんな2人でいたいですか？', [
+    option('お互いに本音を伝えられる2人'),option('前と同じ問題を繰り返さない2人'),option('お互いの生活も大切にできる2人'),option('不安になっても話し合える2人'),option('安心して一緒にいられる2人'),option('結婚や将来まで考えられる2人'),option('とにかく、もう一度付き合いたい',{exclusive:true}),option('まだそこまでは考えられない',{exclusive:true})
   ], { multiple:true, note:'複数選択できます。近いものをすべて選んでください' })
 ];
 
@@ -188,9 +188,9 @@ function setLines(id, lines) {
 }
 
 const paragraphLabels = {
-  'loop-copy':['回答から見えたこと','本当に求めていた安心','二人の間で起きていたこと','復縁に向けて整える部分'],
+  'loop-copy':['回答から見えたこと','本当に求めていた安心','2人の間で起きていたこと','復縁に向けて整える部分'],
   'heart-copy':conceptMode === 'selfesteem'
-    ? ['回答に表れている傾向','自己肯定感とのつながり','不安が強くなる瞬間','二人のすれ違いにつながった行動']
+    ? ['回答に表れている傾向','自己肯定感とのつながり','不安が強くなる瞬間','2人のすれ違いにつながった行動']
     : ['回答に表れている傾向','ハートの欠けとは','不安が動く瞬間','行動が強くなった理由'],
   'past-copy':['回答から見える背景','同じ経験をした方に多い傾向','今回の回答とのつながり','恋愛で起きていたこと'],
   'pattern-impact':['今の彼との復縁への影響','ここから整える意味'],
@@ -378,7 +378,7 @@ function reactionInsight(reaction) {
   if (reaction.includes('次第に減った')) return '最初は安心させてくれた彼の反応が減ったことで、「もっと伝えれば分かってもらえるかも」と確認が増え、彼はさらに距離を取りたくなる流れが生まれていた可能性があります。';
   if (reaction.includes('距離') || reaction.includes('重い') || reaction.includes('疲れる')) return '安心したくて起こした行動が彼には負担として伝わり、彼が距離を取るほど、さらに不安が強くなる循環ができていた可能性があります。';
   if (reaction.includes('喧嘩') || reaction.includes('感情的')) return 'お互いに「分かってほしい」という気持ちが強くなるほど、安心を作る会話ではなく、どちらが正しいかを確かめるやり取りになっていた可能性があります。';
-  return '彼の反応がはっきり分からない状態でも、不安を一人で抱える時間が長くなり、頭の中で悪い結末を大きくしていた可能性があります。';
+  return '彼の反応がはっきり分からない状態でも、不安を1人で抱える時間が長くなり、頭の中で悪い結末を大きくしていた可能性があります。';
 }
 
 function partnerMessage() {
@@ -408,7 +408,7 @@ const stageExplanations = {
 
 const selfesteemStageExplanations = {
   reply:'彼が返信を負担に感じない距離感を作ることが、次の一歩です。連絡を急がず、今の彼の反応に合わせて進める必要があります。',
-  remeet:'連絡は取れていても、二人で会うところまでは進めていません。彼が「また会いたい」と思える関係を作ることが、次の一歩です。',
+  remeet:'連絡は取れていても、2人で会うところまでは進めていません。彼が「また会いたい」と思える関係を作ることが、次の一歩です。',
   reunion:'会うことはできても、もう一度付き合うところまでは進めていません。以前とは違う安心感を彼に感じてもらうことが、次の一歩です。',
   accelerator:'返信や再会はできている状態です。焦って答えを求めず、彼が「また付き合いたい」と思える関係を育てる段階です。'
 };
@@ -417,7 +417,7 @@ function stageReason() {
   const breakup = optionText('breakup_style');
   const current = currentRelationshipAnswer();
   return conceptMode === 'selfesteem'
-    ? [`別れ方は「${breakup}」`,`今の二人は「${current}」という状況です`,selfesteemStageExplanations[diagnosis.stage]]
+    ? [`別れ方は「${breakup}」`,`今の2人は「${current}」という状況です`,selfesteemStageExplanations[diagnosis.stage]]
     : [`「${breakup}」という別れ方と、`,`現在の「${current}」という回答を見ると、`,stageExplanations[diagnosis.stage]];
 }
 
