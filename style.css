@@ -76,14 +76,13 @@ button,input,select{font:inherit}
 .selfesteem-mode .offer-panel>h3{margin:10px 0 24px;font-size:20px;line-height:1.8}
 .selfesteem-mode .offer-panel>p{margin-top:0;font-size:13px;line-height:1.9}
 .selfesteem-mode .offer-panel .offer-emphasis{margin-top:23px;font-weight:700}
-.selfesteem-mode .offer-panel .offer-question{margin-top:19px;font-weight:700}
 .selfesteem-mode .offer-panel .offer-description{margin-top:21px}
 .selfesteem-mode .consult-points{gap:7px;margin:21px 0;padding:17px 18px;border:1px solid #ffd7df;background:#fffafa}
 .selfesteem-mode .consult-points p{color:#5a4f52;font-size:12px;font-weight:500}
 .selfesteem-mode .consult-points p::first-letter{color:var(--pink)}
 .selfesteem-mode .commit-check{align-items:center;margin:20px 0 16px;padding:13px 10px;gap:8px;border-color:#ffc0cb}
 .selfesteem-mode .commit-check input{margin-top:0}
-.selfesteem-mode .commit-check span{font-size:clamp(9px,2.35vw,11px);white-space:nowrap;letter-spacing:-.03em}
+.selfesteem-mode .commit-check span{font-size:clamp(8.5px,2.35vw,11px);white-space:nowrap;letter-spacing:-.04em}
 .selfesteem-mode .offer-panel .primary-btn{line-height:1.45}
 .selfesteem-mode .offer-panel .no-pressure-note{margin-top:12px!important;font-size:9px!important}
 .line-instruction{margin-top:18px;padding:17px;border-radius:14px;background:#fff;text-align:center}.line-instruction strong{display:inline-block;margin:5px 0;padding:6px 16px;border:2px dashed var(--pink);border-radius:9px;color:var(--pink-dark);font-size:18px}.line-instruction button{display:block;margin:10px auto;padding:9px 14px;border:0;border-radius:99px;background:var(--pink-pale);color:var(--pink-dark);font-weight:700;cursor:pointer}.line-instruction small{display:block;color:var(--muted);font-size:10px;line-height:1.6}.no-offer-panel{text-align:center}
