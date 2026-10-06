@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
   <main id="app" class="container">
@@ -168,6 +168,19 @@
         <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
       </article>
 
+      <template id="selfesteem-offer-template">
+        <h3>ここからの復縁作戦を<br>僕と一緒に考えましょう！</h3>
+        <p class="offer-intro">今回の診断で、今の状態や<br>これから意識することは見えてきたと思います。</p>
+        <p class="offer-emphasis">でも、復縁で本当に難しいのはここからです。</p>
+        <p class="offer-question">「じゃあ私と彼の場合、具体的にどう動けばいいの？」</p>
+        <p class="offer-description">今回の復縁作戦会議では、<span class="result-person-name">あなた</span>さんの回答に加えて、彼の性格や別れ方、今の距離感なども直接聞きながら、<span class="result-person-name">あなた</span>さんが次に何をするのがいいかを一緒に決めます。</p>
+        <div class="consult-points"><p>✓ いつ動くのがいい？</p><p>✓ 最初にどんな接点を作る？</p><p>✓ 彼の反応に合わせて次はどうする？</p></div>
+        <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>私と彼の場合どう動けばいいか知りたいです</span></label>
+        <button id="consult-btn" class="primary-btn" disabled>ジローに<br>彼との復縁を相談する</button>
+        <p class="no-pressure-note">※必要な方にのみ個別サポートもご案内しています。</p>
+        <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
+      </template>
+
       <article id="no-offer-panel" class="karute-panel no-offer-panel" hidden>
         <h3>今は、まずあなた自身を守ることを優先してください</h3>
         <p>今回の回答では、すぐに個別相談へ進むよりも、焦らず自分の生活と気持ちを落ち着けることが大切だと考えられます。</p>
@@ -183,6 +196,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=16"></script>
+  <script src="main.js?v=18"></script>
 </body>
 </html>

@@ -331,9 +331,17 @@ function buildDiagnosis() {
   const past = selectedByKey('past_experience').filter(opt => opt.past).map(opt => opt.past);
   const beliefs = selectedByKey('belief').map(opt => opt.belief).filter(value => value && value !== 'まだ明確ではない');
   const belief = beliefs.length ? beliefs.slice(0,2).join('・') : 'まだ明確ではない';
-  const excludedJobs = ['学生','パート・アルバイト','求職中','無職'];
   const exclusions = [];
-  if (excludedJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
+  if (conceptMode === 'selfesteem') {
+    const eligibleJobs = ['会社員','公務員','経営者・役員','自営業・フリーランス'];
+    const eligibleIncomes = ['400〜499万円','500〜699万円','700〜999万円','1,000万円以上'];
+    if (profile.age < 25) exclusions.push('年齢:25歳未満');
+    if (!eligibleJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
+    if (!eligibleIncomes.includes(profile.income)) exclusions.push(`本人年収:${profile.income}`);
+  } else {
+    const excludedJobs = ['学生','パート・アルバイト','求職中','無職'];
+    if (excludedJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
+  }
   if (flags.has('married')) exclusions.push('既婚関係');
   if (flags.has('blocked') || flags.has('no_contact')) exclusions.push('直接の連絡経路なし');
   return { heartScore, heartLevel, tags, flags:[...flags], past, belief, stage, exclusions, canConsult:exclusions.length === 0 };
@@ -521,6 +529,10 @@ function renderResult() {
   $('offer-panel').hidden = isMember || !diagnosis.canConsult;
   $('no-offer-panel').hidden = isMember || diagnosis.canConsult;
   $('member-panel').hidden = !isMember;
+  if (conceptMode === 'selfesteem' && !diagnosis.canConsult) {
+    $('no-offer-panel').querySelector('h3').textContent = 'まずは、今できることから進めてみてください';
+    $('no-offer-panel').querySelector('p').textContent = '今回のカルテで見えた「今やること」を参考に、焦らず1つずつ整理してみてください。';
+  }
   showScreen('result-screen');
   track('result_view',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage,audience:audienceMode});
   if (!previewMode) submitToGoogleForm();
@@ -596,7 +608,8 @@ document.addEventListener('DOMContentLoaded',() => {
     document.querySelector('.stage-panel .panel-label').innerHTML = '<b>5</b>別れ方から見る復縁の現在地';
     document.querySelector('.stage-road [data-stage="accelerator"]').textContent = '関係を深める';
     document.querySelector('.judge-note').innerHTML = '彼の一つの反応だけで<br>次の段階へ進んでいいとは限りません。<br>自分に都合よく判断せず<br>彼の言葉や反応を合わせて見る必要があります。';
-    document.querySelector('#offer-panel > p').textContent = '今回の復縁カルテをもとに';
+    $('offer-panel').replaceChildren($('selfesteem-offer-template').content.cloneNode(true));
+    document.querySelector('#user-income-select + .field-note').textContent = '※無理のない進め方や、個別相談のご案内を考えるために使用します。';
     $('self-map-title').hidden = false;
   }
   if (audienceMode === 'member') {
@@ -644,9 +657,9 @@ document.addEventListener('DOMContentLoaded',() => {
     track('question_back',{from_question:currentIndex + 1,to_question:currentIndex});
     currentIndex -= 1; renderQuestion();
   });
-  const updateConsultButton = () => { $('consult-btn').disabled = !$('commit-checkbox').checked || !$('support-checkbox').checked; };
+  const updateConsultButton = () => { $('consult-btn').disabled = !$('commit-checkbox').checked || (conceptMode !== 'selfesteem' && !$('support-checkbox').checked); };
   $('commit-checkbox').addEventListener('change',updateConsultButton);
-  $('support-checkbox').addEventListener('change',updateConsultButton);
+  if (conceptMode !== 'selfesteem') $('support-checkbox').addEventListener('change',updateConsultButton);
   $('consult-btn').addEventListener('click',() => {
     $('line-instruction').hidden = false;
     $('line-instruction').scrollIntoView({behavior:'smooth',block:'center'});
