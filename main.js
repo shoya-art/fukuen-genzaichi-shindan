@@ -3,6 +3,8 @@ const question = (key, text, options, data = {}) => ({ key, text, options, ...da
 const audienceMode = new URLSearchParams(location.search).get('audience') === 'member' ? 'member' : 'prospect';
 const conceptMode = new URLSearchParams(location.search).get('concept') === 'selfesteem' ? 'selfesteem' : 'heart';
 const previewMode = new URLSearchParams(location.search).get('preview') === '1';
+const prospectIncomeOptions = ['200万円未満','200〜249万円','250〜299万円','300〜349万円','350〜399万円','400〜449万円','450〜499万円','500万円以上'];
+const prospectConsultIncomes = prospectIncomeOptions.slice(3);
 
 const coreQuestions = [
   question('elapsed', '彼と別れてから、<br>どのくらい経ちますか？', ['1ヶ月未満','1〜3ヶ月','3〜6ヶ月','6ヶ月〜1年','1年以上','まだ正式には別れていない']),
@@ -334,13 +336,16 @@ function buildDiagnosis() {
   const exclusions = [];
   if (conceptMode === 'selfesteem') {
     const eligibleJobs = ['会社員','公務員','経営者・役員','自営業・フリーランス'];
-    const eligibleIncomes = ['400〜499万円','500〜699万円','700〜999万円','1,000万円以上'];
+    const eligibleIncomes = audienceMode === 'member'
+      ? ['400〜499万円','500〜699万円','700〜999万円','1,000万円以上']
+      : prospectConsultIncomes;
     if (profile.age < 25) exclusions.push('年齢:25歳未満');
     if (!eligibleJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
     if (!eligibleIncomes.includes(profile.income)) exclusions.push(`本人年収:${profile.income}`);
   } else {
     const excludedJobs = ['学生','パート・アルバイト','求職中','無職'];
     if (excludedJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
+    if (audienceMode === 'prospect' && !prospectConsultIncomes.includes(profile.income)) exclusions.push(`本人年収:${profile.income}`);
   }
   if (flags.has('married')) exclusions.push('既婚関係');
   if (flags.has('blocked') || flags.has('no_contact')) exclusions.push('直接の連絡経路なし');
@@ -598,6 +603,17 @@ function submitToGoogleForm() {
 }
 
 document.addEventListener('DOMContentLoaded',() => {
+  if (audienceMode === 'prospect') {
+    for (const [id, unknownLabel] of [['user-income-select','分からない'],['partner-income-select','分からない']]) {
+      $(id).replaceChildren(
+        new Option('選択してください',''),
+        ...prospectIncomeOptions.map(value => new Option(value,value)),
+        new Option(unknownLabel,unknownLabel)
+      );
+    }
+    document.querySelector('label[for="user-income-select"]').textContent = '現在の年収（分かる範囲で）';
+    document.querySelector('label[for="partner-income-select"]').textContent = '彼の現在の年収（分かる範囲で）';
+  }
   if (conceptMode === 'selfesteem') {
     document.body.classList.add('selfesteem-mode');
     $('start-lead').innerHTML = '20個の質問から、<br>自己肯定感と別れのつながり、<br>今の彼の気持ちと次にやることを整理します。';
