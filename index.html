@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=16">
+  <link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
   <main id="app" class="container">
@@ -155,34 +155,18 @@
       </article>
 
       <article id="offer-panel" class="karute-panel offer-panel">
-        <h3>ここからの復縁作戦を<br>僕と一緒に考えましょう！</h3>
-        <p>今回の復縁カルテをもとに、</p>
-        <div class="consult-points"><p>✓ 今、何から始めるべきか</p><p>✓ どんな方法で復縁を目指すか</p><p>✓ 次にどんな行動をするか</p></div>
-        <p>この3つを一緒に整理しましょう。</p>
-        <h4>ただ、誰にでも実施するわけではありません</h4>
-        <p>この個別相談は<br>話した内容をきちんと実践していく方だけに行います。</p>
-        <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>自分自身とも向き合い、本気で復縁を目指したいです</span></label>
-        <label class="commit-check"><input id="support-checkbox" type="checkbox"><span>必要であれば、自分に合ったサポートの提案も受けます</span></label>
-        <p class="no-pressure-note">※サポートの無理な押し付けや、強引な勧誘は行いません。</p>
-        <button id="consult-btn" class="primary-btn" disabled>ジローと復縁作戦を立てる</button>
-        <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
-      </article>
-
-      <template id="selfesteem-offer-template">
-        <h3>ここからの復縁作戦を<br>僕と一緒に考えましょう！</h3>
-        <p class="offer-intro">今回の診断で、今の状態や<br>これから意識することは見えてきたと思います。</p>
-        <p class="offer-emphasis">でも、復縁で本当に大事なのはここからです！</p>
-        <p class="offer-description">今回の復縁作戦会議では<br><span class="result-person-name">あなた</span>さんの回答に加えて<br>彼の性格や別れ方、今の距離感なども<br>直接聞かせてもらいながら<br><span class="result-person-name">あなた</span>さんが次に何をするべきかを<br>一緒に決めます。</p>
-        <div class="consult-points"><p>✓ いつ動くのがいい？</p><p>✓ 最初にどんな接点を作る？</p><p>✓ 彼の反応に合わせて次はどうする？</p></div>
-        <label class="commit-check"><input id="commit-checkbox" type="checkbox"><span>私と彼の場合、どう動けばいいか知りたいです!!</span></label>
-        <button id="consult-btn" class="primary-btn" disabled>ジローに<br>彼との復縁を相談する</button>
-        <p class="no-pressure-note">※必要な方にのみ個別サポートもご案内しています。</p>
-        <div id="line-instruction" class="line-instruction" hidden><p>公式LINEへ戻って</p><strong>作戦相談</strong><p>と送ってください</p><button id="copy-keyword-btn" type="button">「作戦相談」をコピーする</button><small>送信した時点では予約確定ではありません。<br>診断内容を確認して、LINEでご連絡します。</small></div>
-      </template>
-
-      <article id="no-offer-panel" class="karute-panel no-offer-panel" hidden>
-        <h3>今は、まずあなた自身を守ることを優先してください</h3>
-        <p>今回の回答では、すぐに個別相談へ進むよりも、焦らず自分の生活と気持ちを落ち着けることが大切だと考えられます。</p>
+        <h3>ここからの動き方が重要です</h3>
+        <p id="keyword-copy"><span class="result-person-name">あなた</span>さんの診断結果を僕が確認して<br>ここからの動き方を一緒に考えます。</p>
+        <p class="keyword-guide">この診断を受け取った公式LINEに戻り<br>下の言葉をコピーして、そのまま送ってください。</p>
+        <div id="result-keyword" class="keyword-box">未来設計</div>
+        <button id="copy-keyword-btn" class="primary-btn" type="button">「未来設計」をコピーする</button>
+        <p id="copy-status" class="copy-status" aria-live="polite"></p>
+        <div class="manual-followup-note">
+          <p class="followup-title">キーワードを送ったあとは</p>
+          <p><span class="result-person-name">あなた</span>さんの診断結果を<br>僕がきちんと目を通して確認します。</p>
+          <p>確認まで少しお時間をいただきますが<br>そのまましばらくお待ちください。</p>
+          <small>※確認前に公式LINEをブロックされると<br>僕からの連絡が届かなくなるのでご注意ください。</small>
+        </div>
       </article>
 
       <article id="member-panel" class="karute-panel member-panel" hidden>
@@ -195,6 +179,6 @@
       <button id="close-btn" class="back-btn" type="button">画面を閉じてLINEへ戻る</button>
     </section>
   </main>
-  <script src="main.js?v=20"></script>
+  <script src="main.js?v=21"></script>
 </body>
 </html>

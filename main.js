@@ -531,13 +531,12 @@ function renderResult() {
   $('do-list').innerHTML = actionContent[diagnosis.stage].do.map(item => `<li>${item}</li>`).join('');
   $('dont-list').innerHTML = actionContent[diagnosis.stage].dont.map(item => `<li>${item}</li>`).join('');
   const isMember = audienceMode === 'member';
-  $('offer-panel').hidden = isMember || !diagnosis.canConsult;
-  $('no-offer-panel').hidden = isMember || diagnosis.canConsult;
+  const keyword = diagnosis.canConsult ? '未来設計' : '後悔しない';
+  $('offer-panel').hidden = isMember;
   $('member-panel').hidden = !isMember;
-  if (conceptMode === 'selfesteem' && !diagnosis.canConsult) {
-    $('no-offer-panel').querySelector('h3').textContent = 'まずは、今できることから進めてみてください';
-    $('no-offer-panel').querySelector('p').textContent = '今回のカルテで見えた「今やること」を参考に、焦らず1つずつ整理してみてください。';
-  }
+  $('result-keyword').textContent = keyword;
+  $('copy-keyword-btn').textContent = `「${keyword}」をコピーする`;
+  $('copy-status').textContent = '';
   showScreen('result-screen');
   track('result_view',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage,audience:audienceMode});
   if (!previewMode) submitToGoogleForm();
@@ -591,7 +590,7 @@ function submitToGoogleForm() {
     'entry.1200021442':groupedAnswers(9,11),
     'entry.1848582778':groupedAnswers(12,15),
     'entry.1178729743':groupedAnswers(16,19),
-    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜コンセプト:${conceptMode === 'selfesteem' ? '自己肯定感' : 'ハートの欠け'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? '購入者診断' : (diagnosis.canConsult ? '作戦相談' : 'なし')}`
+    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜コンセプト:${conceptMode === 'selfesteem' ? '自己肯定感' : 'ハートの欠け'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? '購入者診断' : (diagnosis.canConsult ? '未来設計' : '後悔しない')}`
   };
   Object.entries(data).forEach(([name,value]) => {
     const input = document.createElement('input');
@@ -624,7 +623,6 @@ document.addEventListener('DOMContentLoaded',() => {
     document.querySelector('.stage-panel .panel-label').innerHTML = '<b>5</b>別れ方から見る復縁の現在地';
     document.querySelector('.stage-road [data-stage="accelerator"]').textContent = '関係を深める';
     document.querySelector('.judge-note').innerHTML = '彼の一つの反応だけで<br>次の段階へ進んでいいとは限りません。<br>自分に都合よく判断せず<br>彼の言葉や反応を合わせて見る必要があります。';
-    $('offer-panel').replaceChildren($('selfesteem-offer-template').content.cloneNode(true));
     document.querySelector('#user-income-select + .field-note').textContent = '※無理のない進め方や、個別相談のご案内を考えるために使用します。';
     $('self-map-title').hidden = false;
   }
@@ -673,18 +671,21 @@ document.addEventListener('DOMContentLoaded',() => {
     track('question_back',{from_question:currentIndex + 1,to_question:currentIndex});
     currentIndex -= 1; renderQuestion();
   });
-  const updateConsultButton = () => { $('consult-btn').disabled = !$('commit-checkbox').checked || (conceptMode !== 'selfesteem' && !$('support-checkbox').checked); };
-  $('commit-checkbox').addEventListener('change',updateConsultButton);
-  if (conceptMode !== 'selfesteem') $('support-checkbox').addEventListener('change',updateConsultButton);
-  $('consult-btn').addEventListener('click',() => {
-    $('line-instruction').hidden = false;
-    $('line-instruction').scrollIntoView({behavior:'smooth',block:'center'});
-    track('consultation_cta_click',{heart_level:diagnosis.heartLevel,current_stage:diagnosis.stage});
-  });
   $('copy-keyword-btn').addEventListener('click',async() => {
-    try { await navigator.clipboard.writeText('作戦相談'); }
-    catch (_) { window.prompt('この言葉をコピーしてください','作戦相談'); }
-    $('copy-keyword-btn').textContent = 'コピーしました ✓';
+    const keyword = $('result-keyword').textContent;
+    try { await navigator.clipboard.writeText(keyword); }
+    catch (_) {
+      const input = document.createElement('textarea');
+      input.value = keyword;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+    $('copy-status').textContent = `「${keyword}」をコピーしました。公式LINEに戻って送ってください。`;
+    track('keyword_copy',{keyword,heart_level:diagnosis?.heartLevel,current_stage:diagnosis?.stage});
   });
   $('copy-member-keyword-btn').addEventListener('click',async() => {
     try { await navigator.clipboard.writeText('購入者診断'); }
