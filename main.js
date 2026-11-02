@@ -3,8 +3,10 @@ const question = (key, text, options, data = {}) => ({ key, text, options, ...da
 const audienceMode = new URLSearchParams(location.search).get('audience') === 'member' ? 'member' : 'prospect';
 const conceptMode = new URLSearchParams(location.search).get('concept') === 'selfesteem' ? 'selfesteem' : 'heart';
 const previewMode = new URLSearchParams(location.search).get('preview') === '1';
+const memberKeyword = conceptMode === 'selfesteem' ? '彼との復縁を叶える' : '購入者診断';
 const prospectIncomeOptions = ['200万円未満','200〜249万円','250〜299万円','300〜349万円','350〜399万円','400〜449万円','450〜499万円','500万円以上'];
-const prospectConsultIncomes = prospectIncomeOptions.slice(3);
+// 相談の優先順位を整理するための運用点。復縁の確率を表す点数ではありません。
+const prospectIncomeScores = [0,20,40,70,75,80,85,90];
 
 const coreQuestions = [
   question('elapsed', '彼と別れてから、<br>どのくらい経ちますか？', ['1ヶ月未満','1〜3ヶ月','3〜6ヶ月','6ヶ月〜1年','1年以上','まだ正式には別れていない']),
@@ -334,22 +336,28 @@ function buildDiagnosis() {
   const beliefs = selectedByKey('belief').map(opt => opt.belief).filter(value => value && value !== 'まだ明確ではない');
   const belief = beliefs.length ? beliefs.slice(0,2).join('・') : 'まだ明確ではない';
   const exclusions = [];
-  if (conceptMode === 'selfesteem') {
+  let incomeScore = null;
+  let contactScore = null;
+  let leadScore = null;
+  if (audienceMode === 'prospect') {
+    incomeScore = prospectIncomeScores[prospectIncomeOptions.indexOf(profile.income)] ?? 0;
+    contactScore = [10,5,8,0][contact.contact] ?? 0;
+    leadScore = incomeScore + contactScore;
+    if (incomeScore < 70) exclusions.push(`本人年収:${profile.income}`);
+    if (profile.age < 18) exclusions.push('年齢:18歳未満');
+  } else if (conceptMode === 'selfesteem') {
     const eligibleJobs = ['会社員','公務員','経営者・役員','自営業・フリーランス'];
-    const eligibleIncomes = audienceMode === 'member'
-      ? ['400〜499万円','500〜699万円','700〜999万円','1,000万円以上']
-      : prospectConsultIncomes;
+    const eligibleIncomes = ['400〜499万円','500〜699万円','700〜999万円','1,000万円以上'];
     if (profile.age < 25) exclusions.push('年齢:25歳未満');
     if (!eligibleJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
     if (!eligibleIncomes.includes(profile.income)) exclusions.push(`本人年収:${profile.income}`);
   } else {
     const excludedJobs = ['学生','パート・アルバイト','求職中','無職'];
     if (excludedJobs.includes(profile.job)) exclusions.push(`職業:${profile.job}`);
-    if (audienceMode === 'prospect' && !prospectConsultIncomes.includes(profile.income)) exclusions.push(`本人年収:${profile.income}`);
   }
   if (flags.has('married')) exclusions.push('既婚関係');
-  if (flags.has('blocked') || flags.has('no_contact')) exclusions.push('直接の連絡経路なし');
-  return { heartScore, heartLevel, tags, flags:[...flags], past, belief, stage, exclusions, canConsult:exclusions.length === 0 };
+  if (audienceMode === 'member' && (flags.has('blocked') || flags.has('no_contact'))) exclusions.push('直接の連絡経路なし');
+  return { heartScore, heartLevel, tags, flags:[...flags], past, belief, stage, exclusions, incomeScore, contactScore, leadScore, canConsult:exclusions.length === 0 };
 }
 
 const tendencyInsights = {
@@ -590,7 +598,7 @@ function submitToGoogleForm() {
     'entry.1200021442':groupedAnswers(9,11),
     'entry.1848582778':groupedAnswers(12,15),
     'entry.1178729743':groupedAnswers(16,19),
-    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜コンセプト:${conceptMode === 'selfesteem' ? '自己肯定感' : 'ハートの欠け'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? '購入者診断' : (diagnosis.canConsult ? '未来設計' : '後悔しない')}`
+    'entry.721169860':`対象:${audienceMode === 'member' ? '購入者' : '購入前'}｜コンセプト:${conceptMode === 'selfesteem' ? '自己肯定感' : 'ハートの欠け'}｜heart_score:${diagnosis.heartScore}｜heart_level:${diagnosis.heartLevel}｜heart_tags:${diagnosis.tags.join(',')}｜stage:${diagnosis.stage}｜belief:${diagnosis.belief}｜flags:${diagnosis.flags.join(',')}｜除外:${diagnosis.exclusions.join('/') || 'なし'}｜CTA:${audienceMode === 'member' ? memberKeyword : (diagnosis.canConsult ? '未来設計' : '後悔しない')}${audienceMode === 'prospect' ? `｜相談見込み点:${diagnosis.leadScore}｜本人年収点:${diagnosis.incomeScore}｜連絡経路加点:${diagnosis.contactScore}` : ''}`
   };
   Object.entries(data).forEach(([name,value]) => {
     const input = document.createElement('input');
@@ -632,6 +640,8 @@ document.addEventListener('DOMContentLoaded',() => {
     $('start-title').innerHTML = 'ジロー式 <span>復縁診断</span>';
     $('start-lead').innerHTML = '20個の質問から、<br>今の彼の気持ちと、<br>これからのサポート方針を整理します。';
     $('start-btn').textContent = 'サポート受講生専用の診断を始める';
+    $('member-keyword').textContent = memberKeyword;
+    $('copy-member-keyword-btn').textContent = `「${memberKeyword}」をコピーする`;
   }
   track('diagnosis_view',{audience:audienceMode});
   $('start-btn').addEventListener('click',() => showScreen('profile-screen'));
@@ -688,10 +698,10 @@ document.addEventListener('DOMContentLoaded',() => {
     track('keyword_copy',{keyword,heart_level:diagnosis?.heartLevel,current_stage:diagnosis?.stage});
   });
   $('copy-member-keyword-btn').addEventListener('click',async() => {
-    try { await navigator.clipboard.writeText('購入者診断'); }
-    catch (_) { window.prompt('この言葉をコピーしてください','購入者診断'); }
+    try { await navigator.clipboard.writeText(memberKeyword); }
+    catch (_) { window.prompt('この言葉をコピーしてください',memberKeyword); }
     $('copy-member-keyword-btn').textContent = 'コピーしました ✓';
-    track('member_keyword_copy',{heart_level:diagnosis?.heartLevel,current_stage:diagnosis?.stage});
+    track('member_keyword_copy',{keyword:memberKeyword,heart_level:diagnosis?.heartLevel,current_stage:diagnosis?.stage});
   });
   $('close-btn').addEventListener('click',() => window.close());
   window.addEventListener('pagehide',() => {
